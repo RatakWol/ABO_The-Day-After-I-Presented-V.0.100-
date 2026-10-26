@@ -268,7 +268,7 @@ body.qlock,body.qlock *{-webkit-user-select:none!important;user-select:none!impo
 
 </style>
 
-<div class="thmwrap"><span class="ver">Ver.0.102(Beta)</span><button id="thm" aria-expanded="false">外觀</button><div id="thmp" hidden><div class="tr"><span>模式</span><button data-m="auto">跟隨系統</button><button data-m="light">淺色</button><button data-m="dark">深色</button></div><div class="tr"><span>色系</span><button data-p="cream">米黃</button><button data-p="blue">藍</button><button data-p="pink">粉</button><button data-p="gray">灰</button><button data-p="term">終端</button></div></div></div>
+<div class="thmwrap"><span class="ver">Ver.0.103(Beta)</span><button id="thm" aria-expanded="false">外觀</button><div id="thmp" hidden><div class="tr"><span>模式</span><button data-m="auto">跟隨系統</button><button data-m="light">淺色</button><button data-m="dark">深色</button></div><div class="tr"><span>色系</span><button data-p="cream">米黃</button><button data-p="blue">藍</button><button data-p="pink">粉</button><button data-p="gray">灰</button><button data-p="term">終端</button></div></div></div>
 <div class="wrap">
  <section id="intro" class="intro">
   <div class="chart">
@@ -634,11 +634,13 @@ ev({id:'milk',ok:s=>s.milk&&s.known&&s.age>=20&&!s.fired.milk,once:1,
   text:s=>`你已經成年很久了，卻還是常被當成孩子：便利商店店員要你出示證件，路人想幫你提袋子。你身上的奶味好像從來沒有退過。`,fx:{soc:3,mood:-3}});
 
 /* 感情 */
-ev({id:'love',ok:s=>s.age>=24&&s.age<=36&&!s.partner&&!s.flags.loveAsked&&cp(.25),once:1,key:1,
-  text:s=>{s.flags.loveAsked=1;
-    const c=(s.npcs||[]).filter(n=>n.age<=19);let pk=null;
+/* 感情（10/26 Soba：拒絕過一次後整段人生就不可能再有交往對象，不合理）：改成可重複，每次拒絕後隔 2.5 年才可能再遇到，最多 4 次；問過的人不再重複挑 */
+ev({id:'love',ok:s=>s.age>=24&&s.age<=50&&!s.partner&&(s.flags.loveN||0)<4&&gate(s,'loveT',s.flags.loveN?2.5:0)&&cp(s.flags.loveN?.18:.25),rep:1,key:1,
+  text:s=>{s.flags.loveAsked=1;s.flags.loveN=(s.flags.loveN||0)+1;s.flags.loveT=s.t;
+    const tried=s.flags.loveTried=s.flags.loveTried||[];
+    const c=(s.npcs||[]).filter(n=>n.age<=19&&!tried.includes(n.id));let pk=null;
     if(c.length&&chance(.65)){const w=c.map(n=>n.re==='回了信'?4:n.re==='婉拒了'?1.2:.8);let x=R()*w.reduce((a,b)=>a+b,0);for(let i=0;i<c.length;i++){x-=w[i];if(x<=0){pk=c[i];break}}if(!pk)pk=c[c.length-1]}
-    s.flags.loveNpc=pk?pk.id:null;
+    s.flags.loveNpc=pk?pk.id:null;if(pk)tried.push(pk.id);
     if(pk){const nm=pk.nm,who=pk.fg==='男'?'他':'她';
       const how=pk.re==='回了信'?`你們高中那時回過信，後來沒聯絡。`:pk.re==='婉拒了'?`當年你婉拒了${who}的信，${who}還記得你的名字。`:pk.re==='沒有回應'?`當年你沒有回${who}的信，${who}一直沒說。`:'';
       const lk=pk.known===false?`當年${who}還沒分化，後來才聽說是 ${ID_TXT[pk.t]}。`:'';
@@ -1069,6 +1071,11 @@ const INH=[
 const inhTier=s=>{let t=s.region;if(s.attrs.wealth>=78)t++;else if(s.attrs.wealth<=15)t--;return Math.max(0,Math.min(4,t))};
 const onInh=s=>s.known&&(s.sec==='A'||s.sec==='O')&&s.age>=12&&!s.mDone;
 const inhYear=s=>{if(onInh(s))fx({wealth:-.3*INH[inhTier(s)].cost*s.dt})};
+/* 收入與生活水準（10/26 Soba：搬到好區域後錢一直扣到變赤貧）：原本遊戲沒有任何「收入」，財富只會被抑制劑、項圈維護費這類固定開銷一路扣掉，
+   區域越好藥越貴，越住好越窮。現在每年讓財富緩慢往「這個區域的一般水準」靠攏（收入與花費的平衡），固定開銷變成「比一般水準低一截」而不是無底洞；
+   搬回較低的區域，水準下降，開銷也降。速率 0.1／年，事件造成的漲跌仍然有感。 */
+const WEALTH_NORM=[20,36,54,71,87],WEALTH_RATE=.1;
+const wealthYear=s=>{const T=WEALTH_NORM[s.region||0];s.attrs.wealth=clamp(s.attrs.wealth+(T-s.attrs.wealth)*WEALTH_RATE*s.dt)};
 const myPeriod=s=>s.sec==='O'?'發情期':'易感期';
 ev({id:'ex_inh_first',ok:s=>onInh(s)&&!s.fired.ex_inh_first,once:1,key:1,
   text:s=>{const t=inhTier(s),P=myPeriod(s);return [
@@ -2301,7 +2308,7 @@ function step(first){
   if(!ac.length&&!cc.length){
     const g=generic(S);jobKeep(S,g[0]);lines.push({t:g[0],key:false});fx(g[1]);
   }
-  inhYear(S);
+  inhYear(S);if(!window.NOREV)wealthYear(S);
   const co=collarYear(S);if(co){lines.push({t:co[0],key:false});fx(co[1])}
   curAuto=lines;curChoices=cc;curYear={age:S.age,label:tlabel(),lines:lines.slice(),card};
   render();
@@ -2442,6 +2449,7 @@ function collarSVG(mi,craft){
 let KSEL=null;
 function perfumeIcon(c){return `<svg viewBox="0 0 80 120" width="40" height="60" aria-hidden="true"><defs><clipPath id="pic"><rect x="14" y="34" width="52" height="76" rx="11"/></clipPath></defs><rect x="24" y="3" width="32" height="15" rx="3" fill="var(--fg)"/><rect x="30" y="18" width="20" height="13" fill="var(--line)" stroke="var(--fg)" stroke-width="1.5"/><rect x="10" y="30" width="60" height="84" rx="14" fill="var(--card)" stroke="var(--fg)" stroke-width="2.5"/><g clip-path="url(#pic)"><rect x="14" y="62" width="52" height="48" fill="${c}"/></g></svg>`}
 function renderKeeps(){
+  const cbx=$('#collarbox');$('#keeps').appendChild(cbx);/* 先把項圈欄搬出 klist，避免重寫 innerHTML 時被一起清掉 */
   const kb=$('#keeps');const ks=(S.keeps||[]);kb.hidden=false;kb.classList.toggle('empty',!ks.length);if(!ks.length){$('#klist').innerHTML='<div class="kempty">還沒有收到任何東西。情書、禮物、香水和項圈，之後都會收在這裡。</div>';return}
   const CAP={letter:'封',gift:'件',scent:'瓶',collar:'條',craft:'件',token:'件'};
   const PAL=['#FFFDF6','#F5E6E0','#E4EEE8','#EFE6F5'],CHIP=['#E7C46A','#B7A4D3','#8CB7A5','#E8A598','#9FC3D6'],ROT=[-3,2.5,-1.5,3.5,-2],LROT=[-6,4,-3,7,-5,2,-7,5],LY=[0,5,-3,6,-5,2,4,-4];
@@ -2454,10 +2462,11 @@ function renderKeeps(){
       if(t==='letter')return `<button class="kcard${cl}" data-i="${ix}" style="background:${PAL[i%4]};--r:${LROT[(i*3)%8]}deg;--y:${LY[(i*5)%8]}px"><b>${k.name}</b><small>${k.age}歲${k.status?'・'+k.status:''}</small></button>`;
       if(t==='collar'||t==='craft')return `<button class="kpill${cl}" data-i="${ix}">${k.own&&k.cfg?CollarArt.render(k.cfg,'flat',{pfx:'kp'+ix,crop:1,w:84}):collarSVG(k.mat||0,t==='craft')}<span>${k.name}${k.own&&S.collar&&k.id===S.wornId?'・戴著':''}</span></button>`;
       if(t==='scent')return `<button class="kbot${cl}" data-i="${ix}">${perfumeIcon(CHIP[i%5])}<span>${k.name}</span><small>${k.age}歲</small></button>`;
-      return `<button class="kchip${cl}" data-i="${ix}" style="background:${CHIP[i%5]}">${k.name}<small>${k.age}歲</small></button>`}).join('')+`</div><div class="kcap">${KEEP_TYPE[t]}　共 ${arr.length} ${CAP[t]||'件'}</div>`;
+      return `<button class="kchip${cl}" data-i="${ix}" style="background:${CHIP[i%5]}">${k.name}<small>${k.age}歲</small></button>`}).join('')+`</div><div class="kcap">${KEEP_TYPE[t]}　共 ${arr.length} ${CAP[t]||'件'}</div>${t==='collar'?'<div id="cslot"></div>':''}`;
   });
   h+=`<div class="knote" id="knote" hidden></div>`;
   $('#klist').innerHTML=h;
+  {const sl=$('#cslot');if(sl)sl.appendChild(cbx)}
   const showNote=()=>{const k=ks.find(x=>x.id===KSEL),n=$('#knote');if(!k){n.hidden=true;return}n.hidden=false;
     n.innerHTML=`<b>${k.name}</b>　<small style="color:var(--mute)">${k.age}歲${k.status?'・'+k.status:''}${k.lost?'・'+k.lost:''}</small><br>${(k.type==='collar'||k.type==='craft')?`材質：${MAT[k.mat||0].n}<br>`:''}${(k.text||'').replace(/\n/g,'<br>')}`};
   $('#klist').onclick=e=>{const bt=e.target.closest('button[data-i]');if(!bt)return;const k=ks[+bt.dataset.i];KSEL=(KSEL===k.id?null:k.id);renderKeeps()};
