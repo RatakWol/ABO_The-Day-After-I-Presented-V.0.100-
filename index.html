@@ -27,6 +27,7 @@
 :root[data-theme="light"][data-pal="pink"]{--bg:#F0D9DC;--card:#FFF6F5;--fg:#4A2F35;--mute:#8A6A70;--line:#E6C6CB;--accent:#C2506B;--accent-fg:#FFF6F5;--good:#5A8A64;--shadow:#E2BDC3;--tape:#F0A8B8}
 :root[data-theme="light"][data-pal="gray"]{--bg:#DADAD8;--card:#F6F5F2;--fg:#2E2E2E;--mute:#6E6E6A;--line:#C6C6C2;--accent:#5A6470;--accent-fg:#F6F5F2;--good:#4F7A55;--shadow:#BEBEBA;--tape:#AEB4BA}
 .thmwrap{position:fixed;top:10px;right:10px;z-index:30;text-align:right}
+.ver{font-size:12px;color:var(--mute);margin-right:8px;vertical-align:middle;letter-spacing:.3px}
 #thm{font-size:13px;border:1.5px solid var(--fg);border-radius:4px;background:var(--card);color:var(--fg);padding:3px 12px;box-shadow:2px 2px 0 var(--shadow)}
 #thmp{margin-top:6px;background:var(--card);border:1.5px solid var(--fg);border-radius:4px;box-shadow:3px 3px 0 var(--shadow);padding:10px 12px;display:flex;flex-direction:column;gap:8px;text-align:left}
 #thmp[hidden]{display:none}
@@ -68,7 +69,10 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .autobar{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
 .autobar button{font-size:12px;border:1.5px dashed var(--mute);border-radius:12px;background:transparent;padding:1px 12px;color:var(--mute)}
 .autobar button[aria-pressed="true"]{border:1.5px solid var(--accent);color:var(--accent);font-weight:700}
-.minib{display:flex;align-items:center;gap:10px;margin-top:10px}
+.hudrow{display:flex;align-items:center;gap:6px 14px;flex-wrap:wrap;margin-top:10px}
+.hudrow:not(:has(>:not([hidden]))){display:none}
+.minib{display:flex;align-items:center;gap:10px}
+.minib[hidden]{display:none}
 .minib .mt{display:flex;flex-direction:column;min-width:0}
 .minib small{color:var(--mute);font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
@@ -76,7 +80,10 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .st b{display:block;height:8px;border:1.5px solid var(--fg);border-radius:6px;margin-top:3px;overflow:hidden;background:var(--card)}
 .st b i{display:block;height:100%;background:var(--fg);opacity:.85;transition:width .3s}
 .stats .st:nth-child(1) b i{background:#E8A598}.stats .st:nth-child(2) b i{background:#E7C46A}.stats .st:nth-child(3) b i{background:#8CB7A5}.stats .st:nth-child(4) b i{background:#9FC3D6}.stats .st:nth-child(5) b i{background:#B7A4D3}.stats .st:nth-child(6) b i{background:#E8A598}.stats .st:nth-child(7) b i{background:#8CB7A5}.stats .st:nth-child(8) b i{background:#E7C46A}
-.collar{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:13px}
+.collar{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:13px;flex-wrap:wrap}
+.cpv{flex:0 0 auto;margin-left:auto;display:flex;justify-content:center;-webkit-user-select:none;user-select:none}
+.cpv[hidden]{display:none}
+.cpv svg{display:block;max-width:100%;height:auto}
 .collar button{border:1px solid var(--line);background:var(--card);border-radius:99px;padding:3px 14px}
 .collar button[aria-pressed=true]{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
 /* 卡片 */
@@ -111,10 +118,9 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
   .pgR::before{content:'';position:absolute;top:-10px;right:50px;width:90px;height:24px;background:var(--f);opacity:.8;transform:rotate(3deg)}
   .spine{background:linear-gradient(90deg,var(--shadow),color-mix(in srgb,var(--card) 85%,var(--shadow)))}
   .pgL .hud{background:var(--card);top:0;padding-top:16px}
-  #keeps,#keeps.empty,#keeps[hidden]{display:block;margin:0;position:sticky;top:50px;background:none;border:0;box-shadow:none;padding:0}
+  #keeps,#keeps.empty,#keeps[hidden]{display:block;margin:0;background:none;border:0;box-shadow:none;padding:0}
   #keeps::before{display:none}
   #keeps h3{font-size:22px;color:var(--fg);margin-bottom:6px}
-  #klist{max-height:calc(100vh - 230px);overflow-y:auto;padding-right:4px}
 }
 
 .hist h3{font-size:15px;color:var(--mute);margin-bottom:8px}
@@ -193,6 +199,11 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .kbot{display:flex;flex-direction:column;align-items:center;gap:2px;width:86px;background:transparent;border:1.5px dashed transparent;border-radius:8px;padding:4px 2px;color:var(--fg);font-size:12px;line-height:1.35;text-align:center}
 .kbot small{color:var(--mute);font-size:11px}
 .kbot.on{outline:2px solid var(--accent);outline-offset:2px}
+.kgrp.letter{gap:8px 0;padding:14px 4px 4px 68px}
+.kgrp.letter .kcard{margin-left:-64px;transform:translateY(var(--y,0)) rotate(var(--r,0deg));width:112px;min-width:112px;max-width:112px;min-height:64px;transition:transform .15s,box-shadow .15s}
+.kgrp.letter .kcard:not(.on) b{opacity:.0}
+.kgrp.letter .kcard.on{z-index:5;transform:translateY(-12px) rotate(0);box-shadow:3px 4px 0 var(--shadow)}
+.kgrp.letter .kcard:hover:not(.on){transform:translateY(calc(var(--y,0px) - 5px)) rotate(var(--r,0deg))}
 .kcard.on,.kchip.on,.kpill.on{outline:2px solid var(--accent);outline-offset:2px}
 .kcard.lost,.kchip.lost,.kpill.lost{opacity:.5}
 .knote{border:1.5px solid var(--fg);background:var(--card);padding:12px 16px;transform:rotate(-1deg);box-shadow:2px 2px 0 var(--shadow);margin:6px 2px 4px;line-height:1.9;font-size:14px}
@@ -235,7 +246,7 @@ body.qlock,body.qlock *{-webkit-user-select:none!important;user-select:none!impo
 
 </style>
 
-<div class="thmwrap"><button id="thm" aria-expanded="false">外觀</button><div id="thmp" hidden><div class="tr"><span>模式</span><button data-m="auto">跟隨系統</button><button data-m="light">淺色</button><button data-m="dark">深色</button></div><div class="tr"><span>色系</span><button data-p="cream">米黃</button><button data-p="blue">藍</button><button data-p="pink">粉</button><button data-p="gray">灰</button><button data-p="term">終端</button></div></div></div>
+<div class="thmwrap"><span class="ver">Ver.0.100(Beta)</span><button id="thm" aria-expanded="false">外觀</button><div id="thmp" hidden><div class="tr"><span>模式</span><button data-m="auto">跟隨系統</button><button data-m="light">淺色</button><button data-m="dark">深色</button></div><div class="tr"><span>色系</span><button data-p="cream">米黃</button><button data-p="blue">藍</button><button data-p="pink">粉</button><button data-p="gray">灰</button><button data-p="term">終端</button></div></div></div>
 <div class="wrap">
  <section id="intro" class="intro">
   <div class="chart">
@@ -274,7 +285,7 @@ body.qlock,body.qlock *{-webkit-user-select:none!important;user-select:none!impo
    <div class="agebar"><span class="age"><span id="age">10</span><small>歲</small></span><span id="who" style="color:var(--mute)"></span><span class="id" id="idtag">尚未分化</span></div>
    <div class="prog"><i id="prog"></i></div>
    <div class="stats" id="stats"></div>
-   <div class="minib" id="minib" hidden></div>
+   <div class="hudrow"><div class="minib" id="minib" hidden></div><div id="cpv" class="cpv" hidden></div></div>
    <div class="autobar" id="autobar"><button type="button" id="au"></button><button type="button" id="ap"></button></div>
    <div class="collar" id="kidbox" hidden><span>孩子</span><button id="kb" aria-pressed="false">順其自然</button><button id="kc" aria-pressed="false">懷孕方：我</button><span id="kn" style="color:var(--mute)"></span></div>
    <div class="collar" id="collarbox" hidden><span>出門戴項圈？</span><button id="cb" aria-pressed="false">戴</button><select id="ct" aria-label="項圈類型"></select><span id="cn" style="color:var(--mute)"></span></div>
@@ -441,7 +452,7 @@ const INTRO_SC=[
  {t:'放學的走廊上，幾個高年級的學生聊得很大聲，一看到你們走近就同時閉嘴。你回頭看了一眼，覺得他們好像比昨天又遠了一點。'},
  {t:'班上發了一張分化年齡的統計表，老師說多數人在十二到十六歲之間，但也有人更早或更晚。你在表上找了半天，不知道自己該算哪一格。'},
  {t:'你在日曆上偷偷畫了一個圈，那是你覺得自己最可能分化的日子。畫完又擦掉，怕被家長看到，擦得太用力，紙都起毛了。'},
- {t:'你問家長：「A、O、B 到底是什麼？」家長想了很久才說：「是你以後會知道的事。」你覺得這個回答根本沒回答，但看家長的表情，也不好再追問。'},
+ {t:'你問家長：「Alpha、Beta、Omega 到底是什麼？」家長想了很久才說：「是你以後會知道的事。」你覺得這個回答根本沒回答，但看家長的表情，也不好再追問。'},
  {r:0,t:'家裡停電了，你和家長在蠟燭的光裡寫作業，隔壁傳來有人在吵架的聲音。家長把你的課本往自己這邊拉了一點，說：「專心。」你偷偷想，分化之後，會不會有什麼東西變得不一樣。'},
  {r:1,t:'放學後你繞去家長的店裡幫忙。有客人聊起「家裡孩子上週分化了，整晚吵著要吃甜的」，大家都笑了。你把找的零錢數了兩遍，心裡想：我也會那樣嗎？'},
  {r:2,t:'週末家長帶你去圖書館，你在童書區旁邊找到一本《第二性別問答（兒童版）》。你站著讀了一個小時，最後借回家，用外套包著，不想讓人看到封面。'},
@@ -452,7 +463,7 @@ const INTRO_SC=[
  {p:1,t:s=>`你和${s.cast.pal[0]}在放學的路上打賭：誰先分化，誰就請對方吃一個月的點心。你們還認真地用樹枝在地上寫了契約，風一吹就糊掉了。`}];
 const INTRO_CH=[
  {att:'憧憬',t:['好憧憬。長大就能聞到了。','我想快點長大。','我想知道我會變成什麼。','期待。'],res:['你偷偷盼著那一天。','你開始在日曆上偷偷數日子。','你想著想著，嘴角翹了起來。'],fx:{mood:6}},
- {att:'擔心',t:['有點怕，要是變成 A 或 O 怎麼辦。','我不想變。','我寧可晚一點。','不知道會變成什麼，有點怕。'],res:['你開始留意班上那些特別的人。','你把這個念頭壓在心底，裝作沒事。','那天晚上你比平常安靜。'],fx:{mood:-4,soc:2}},
+ {att:'擔心',t:['有點怕，要是變成 Alpha 或 Omega 怎麼辦。','我不想變。','我寧可晚一點。','不知道會變成什麼，有點怕。'],res:['你開始留意班上那些特別的人。','你把這個念頭壓在心底，裝作沒事。','那天晚上你比平常安靜。'],fx:{mood:-4,soc:2}},
  {att:'平常心',t:['順其自然吧。','隨它去。','到時候再說。','現在想也沒用。'],res:['你照常過日子。','你把書包甩到肩上，繼續往前走。','你決定先去吃點東西。'],fx:{mood:2}}];
 ev({id:'intro',ok:s=>s.mo===0,key:1,
   text:s=>{const m=s.bm,se=m>=3&&m<=5?'sp':m>=6&&m<=8?'su':m>=9&&m<=11?'au':'wi',c=s.cast||{};
@@ -530,7 +541,7 @@ ev({id:'ex_diy_collar',ok:s=>inShou(s)&&!s.fired.ex_diy_collar&&cp(.9),once:1,
            {t:'不想玩這個。',res:'你覺得有點幼稚，但看著他們玩得很開心，心裡有一點點羨慕。',run:s=>s.flags.diy='none'}]});
 ev({id:'ex_diy_collar2',ok:s=>s.flags.diy==='ask'&&!s.fired.ex_diy_collar2&&inShou(s)&&cp(.9),once:1,
   text:s=>`家長帶你去店裡看了真正的項圈。店員說你現在還在收味期，不用戴，但既然你想要，可以挑一條最細的練習用的。`,
-  choices:[{t:'乖乖挑一條細的。',res:'你挑了一條淺色的細項圈，戴上去涼涼的，剛好貼在脖子上。你覺得自己離大人近了一點。',fx:{mood:2,fam:-1}},
+  choices:[{t:'乖乖挑一條細的。',res:'你挑了一條淺色的細項圈，戴上去涼涼的，剛好貼在脖子上。你覺得自己離大人近了一點。',run:s=>{s.flags.practiceCollar=1;addKeep(s,{id:'collar_practice',type:'collar',mat:0,name:'練習用的細項圈',text:'收味期，家長帶你去店裡挑的。最細最輕的那種，淺色，不用戴，你還是偷偷戴過幾次。'})},fx:{mood:2,fam:-1}},
            {t:'不管，我就要最厚的那條！',res:'家長沒有罵你，只是從櫃台借了一條最厚的給你戴一天。你的脖子很快就痠了，連低頭吃飯都覺得很重。回家路上，你自己把它解了下來。',fx:{mood:-2,ease:-1}},
            {t:'算了，不要了。',res:'你說你只是問問看。家長笑了笑，沒有戳破。',fx:{mood:0}}]});
 ev({id:'ex_diy_collar3',ok:s=>s.flags.diy==='ribbon'&&!s.fired.ex_diy_collar3&&inShou(s)&&cp(.7),once:1,
@@ -816,7 +827,7 @@ const BD_COMMON=[
  ['蛋糕上的蠟燭被你一口氣吹熄，你閉上眼睛許了願，沒有說出口。',{mood:2}],
  ['家人圍著你唱生日快樂歌，家長走音走得很認真，你笑到差點嗆到。',{mood:2,bond:1}],
  ['朋友遞給你一張手寫的生日卡片，字歪歪的，最後還畫了一個奇怪的蛋糕。',{soc:2,mood:1}],
- ['老師在黑板的角落寫了一行很小的「祝你生日快樂」，全班回頭看你，你把臉埋進課本裡。',{soc:1,mood:1}],
+ ['黑板的角落有人用粉筆寫了一行很小的「祝你生日快樂」，沒有署名。全班回頭看你，你把臉埋進課本裡。',{soc:1,mood:1}],
  ['你想要的禮物沒有拿到，但拆開來的東西你也還算喜歡。你對自己說這樣就夠了。',{}],
  ['生日這天剛好有考試，你寫完走出教室，覺得這個生日有一半被考卷吃掉了。',{mood:-1}],
  ['蛋糕上的蠟燭點了三次都沒點起來，最後大家乾脆一起鼓掌，當作點好了。',{mood:2,bond:1}],
@@ -1212,7 +1223,7 @@ ev({id:'ex_parent_meeting',ok:s=>s.age>=13&&s.age<=17&&!s.fired.ex_parent_meetin
 ev({id:'ex_best_friend_scent',ok:s=>s.friend&&s.known&&s.age>=14&&s.age<=19&&!s.fired.ex_best_friend_scent&&cp(.3),once:1,
   text:s=>s.sec==='B'?`${s.friend.nm||'朋友'}說你的味道讓他安心，你也想說你聞不到他的，卻沒說出口。`:`${s.friend.nm||'朋友'}說你的味道讓他安心。你也想說，他身上有一種很熟悉的味道，讓你覺得待在旁邊很自在，卻沒說出口。`,fx:{soc:2,mood:1}});
 ev({id:'ex_collar_first',ok:s=>s.known&&s.sec==='O'&&s.collarOn&&!s.fired.ex_collar_first,once:1,key:1,
-  text:s=>(addKeep(s,{id:'collar_first',type:'collar',name:'第一個項圈',text:'家人帶你去挑的。'}),`家人帶你去挑第一個項圈。${s.region===0?'店員只拿出最便宜的一般型，說其他的要預訂，你連價錢都不敢問。':s.region===1?'店員拿出兩種類型，更厚的那一種你看了一眼價錢，沒再多看。':'店員拿出三種類型，講解了各自的鎖法和價錢。'}你摸著那圈冰涼的材質，覺得自己好像一下子長大了。`),fx:{mood:0,fam:-1}});
+  text:s=>(addKeep(s,{id:'collar_first',type:'collar',name:s.flags.practiceCollar?'第一個正式項圈':'第一個項圈',text:s.flags.practiceCollar?'收味期那條練習用的之後，家人帶你去挑的第一條真的。':'家人帶你去挑的。'}),`家人帶你去挑${s.flags.practiceCollar?'第一條真正要天天戴的項圈，不是練習用的了':'第一個項圈'}。${s.region===0?'店員只拿出最便宜的一般型，說其他的要預訂，你連價錢都不敢問。':s.region===1?'店員拿出兩種類型，更厚的那一種你看了一眼價錢，沒再多看。':'店員拿出三種類型，講解了各自的鎖法和價錢。'}你摸著那圈冰涼的材質，覺得自己好像一下子長大了。`),fx:{mood:0,fam:-1}});
 ev({id:'ex_alpha_room',ok:s=>isA(s)&&s.age>=14&&s.age<=19&&!s.fired.ex_alpha_room&&cp(.3),once:1,
   text:s=>`學校給 Alpha 學生準備了一間隔離室，門上寫著「安靜休息」。你每次經過都假裝沒看見，但大家都知道那是給誰的。`,fx:{mood:-2,soc:-1}});
 ev({id:'ex_omega_shelter',ok:s=>isO(s)&&s.age>=14&&s.age<=19&&!s.fired.ex_omega_shelter&&cp(.3),once:1,
@@ -1683,6 +1694,246 @@ ev({id:'a_rut_station',ok:s=>s.sec==='A'&&s.known&&s.age>=19&&s.age<=50&&!s.fire
         render()})}},
    {t:'轉身，立刻按下緊急鈴求助。',res:`你用最後一點理智按了鈴，退到離長椅最遠的角落，把額頭抵在冰涼的牆上。站務員趕來時，你已經說不出完整的句子。事後你被帶去做筆錄，雖然沒有人受傷，你還是在紙上簽了名。站務員拍了拍你的肩膀，什麼也沒說。`,fx:{safe:-1,mood:-3,moral:2}}]});
 
+/* 項圈繪製（10/26，設計器與遊戲共用同一份）。來源：此檔。設計器 collar/index.html 由 collar/build_lab.py 把本檔嵌進去。
+   render(cfg,view,opt)：view=flat|worn；opt={pfx:svg id 前綴,crop:1 只取項圈範圍,w:寬度,cls,img:自畫圖片 dataURL,pv:預覽底色} */
+const CollarArt=(()=>{
+const MATS=[
+ {n:'布',c:'#E3A9A0'},{n:'蕾絲',c:'#FBF3E6'},{n:'皮革',c:'#7A4B35'},
+ {n:'矽膠',c:'#8CC7C0'},{n:'金屬',c:'#AAB3BC'},{n:'隱藏金屬',c:'#C9B5DE'}];
+const PAL=['#E3A9A0','#F2C6A0','#F0DC8C','#B9D8A8','#8CC7C0','#9FC3D6','#C9B5DE','#E8B4C8','#FBF3E6','#7A4B35','#4A4A52','#1F1F24','#B02E3C','#2F4A7A'];
+const ACC=['#D9B75E','#C7CED4','#D9A38E','#3B3B3B','#B8A98C'];
+const DEF={mat:0,color:null,width:46,curve:14,edge:'round',stitch:'none',trim:'none',clasp:'buckle',cpos:'back',charm:'none',acc:'#D9B75E',xray:false,knot:'side',tail:70,pat:'plain',col2:null,mstyle:'mesh'};
+const METALS=['#B9C0C7','#8E959C','#3F4348','#C9A94E','#C99A8A','#6E757C'];
+
+function shade(h,f){const n=parseInt(h.slice(1),16);let r=n>>16,g=(n>>8)&255,b=n&255;const t=f<0?0:255,p=Math.abs(f);
+ r=Math.round((t-r)*p+r);g=Math.round((t-g)*p+g);b=Math.round((t-b)*p+b);
+ return '#'+((1<<24)+(r<<16)+(g<<8)+b).toString(16).slice(1)}
+function lum(h){const n=parseInt(h.slice(1),16);return .299*(n>>16)+.587*((n>>8)&255)+.114*(n&255)}
+
+/* 寶石蝴蝶結的中央胸針：金屬框＋一圈小珠邊＋珍珠（Soba 10/26 19:32 參考圖：飄帶蝴蝶結中間帶珍珠寶石） */
+function brooch(bx,by,kn,acc,dk,P){const f=n=>n.toFixed(1),rx=kn*2.4,ry=kn*3,bd=12;let beads='';
+ for(let i=0;i<bd;i++){const a=i/bd*Math.PI*2;beads+=`<circle cx="${f(bx+Math.cos(a)*rx)}" cy="${f(by+Math.sin(a)*ry)}" r="${f(kn*.42)}" fill="${shade(acc,.2)}" stroke="${dk}" stroke-width=".6"/>`}
+ return `<defs><radialGradient id="${P}pl" cx=".35" cy=".3" r=".85"><stop offset="0" stop-color="#fffdf8"/><stop offset=".55" stop-color="#e9dfd1"/><stop offset="1" stop-color="#b9ad9b"/></radialGradient></defs>`+
+  `<ellipse cx="${f(bx)}" cy="${f(by)}" rx="${f(rx)}" ry="${f(ry)}" fill="${acc}" stroke="${dk}" stroke-width="1"/>${beads}<ellipse cx="${f(bx)}" cy="${f(by)}" rx="${f(rx*.74)}" ry="${f(ry*.74)}" fill="${shade(acc,-.3)}" stroke="${dk}" stroke-width=".8"/><ellipse cx="${f(bx)}" cy="${f(by)}" rx="${f(rx*.62)}" ry="${f(ry*.62)}" fill="url(#${P}pl)" stroke="${shade(acc,-.45)}" stroke-width=".7"/><ellipse cx="${f(bx-rx*.18)}" cy="${f(by-ry*.22)}" rx="${f(rx*.14)}" ry="${f(ry*.1)}" fill="#fff" fill-opacity=".85"/>`}
+function render(c,view,o){
+ o=o||{};const P=o.pfx||'m',worn=view==='worn';
+ const mat=MATS[c.mat],col=c.color||mat.c,acc=c.acc,h=c.width/2;
+ const x0=o.span?o.span[0]:(worn?92:24),x1=o.span?o.span[1]:(worn?268:336),cy=worn?112:62;
+ const cv=worn?c.curve*1.3+8:c.curve*.7;
+ const X=t=>x0+(x1-x0)*t;
+ const geo=hh=>{
+  const Y=(t,dy)=>cy-hh+dy+cv*4*t*(1-t);
+  const poly=(dy,a,b,n)=>{n=n||24;let s='';for(let i=0;i<=n;i++){const t=a+(b-a)*i/n;s+=`${i?'L':'M'}${X(t).toFixed(1)},${Y(t,dy).toFixed(1)} `}return s};
+  const pl=(dy,a,b)=>poly(dy,a,b).replace(/^M/,'L');
+  const d=rr=>{const cap=(x,y)=>rr?`A ${rr} ${hh} 0 0 1 ${x.toFixed(1)},${y.toFixed(1)} `:`L${x.toFixed(1)},${y.toFixed(1)} `;
+   return `M${X(0).toFixed(1)},${Y(0,0).toFixed(1)} ${pl(0,0,1)}${cap(X(1),Y(1,2*hh))}${pl(2*hh,1,0)}${cap(X(0),Y(0,0))}Z`};
+  return {Y,poly,d};
+ };
+ const G=geo(h);
+ const rr=c.mat===3?Math.min(h*1.1,20):(c.edge==='round'?Math.min(14,h):0);
+ const dBand=G.d(c.mat===1?0:rr);
+ const outline=c.mat===1?'#8C7B66':c.mat===4?shade(col,-.55):'#3B2F25';
+ const isHid=c.mat===5,isBow=c.trim==='bow'||c.trim==='bowgem';
+ const showHW=!isHid||c.xray;
+ let defs='',back='',body='',front='';
+ if(o.lugs&&!isHid){defs+=`<linearGradient id="${P}lg2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6B747D"/><stop offset=".5" stop-color="#C7CED4"/><stop offset="1" stop-color="#6B747D"/></linearGradient>`;
+  back+=`<rect x="${x0-10}" y="${cy-h-3}" width="11" height="${2*h+6}" rx="2.5" fill="url(#${P}lg2)" stroke="#3a4046" stroke-width="1.1"/><rect x="${x1-1}" y="${cy-h-3}" width="11" height="${2*h+6}" rx="2.5" fill="url(#${P}lg2)" stroke="#3a4046" stroke-width="1.1"/>`}
+ defs+=`<clipPath id="${P}c"><path d="${dBand}"/></clipPath>`;
+ defs+=`<linearGradient id="${P}sh" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".22"/><stop offset=".55" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".16"/></linearGradient>`;
+ const full=`<rect x="0" y="0" width="360" height="270"`;
+ if(worn){
+  const neckC=lum(o.pv||'#f4efe6')<110?'#4a4750':'#cfcbc6';
+  back+=`<path d="M95 0 C100 95 92 160 58 205 L0 240 L0 270 L360 270 L360 240 L302 205 C268 160 260 95 265 0 Z" fill="${neckC}"/>`;
+  back+=`<path d="M95 0 C100 95 92 160 58 205 L0 240 L0 270 L360 270 L360 240 L302 205 C268 160 260 95 265 0 Z" fill="url(#${P}nk)"/>`;
+  defs+=`<linearGradient id="${P}nk" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#000" stop-opacity=".16"/><stop offset=".3" stop-color="#000" stop-opacity="0"/><stop offset=".7" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".16"/></linearGradient>`;
+  defs+=`<linearGradient id="${P}wr" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#000" stop-opacity=".4"/><stop offset=".2" stop-color="#000" stop-opacity="0"/><stop offset=".8" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".4"/></linearGradient>`;
+ }
+ let fill='';
+ if(o.img&&!isHid){
+  fill=`<image href="${o.img}" x="${x0-16}" y="${cy-h-4}" width="${x1-x0+32}" height="${2*h+cv+8}" preserveAspectRatio="xMidYMid slice"/><rect x="0" y="0" width="360" height="270" fill="url(#${P}sh)" opacity=".5"/>`;
+ }else if(c.mat===0){
+  defs+=`<pattern id="${P}wv" width="4" height="4" patternUnits="userSpaceOnUse"><path d="M0 1H4M0 3H4" stroke="#fff" stroke-opacity=".28" stroke-width=".8"/><path d="M1 0V4M3 0V4" stroke="#000" stroke-opacity=".07" stroke-width=".8"/></pattern>`;
+  fill=`${full} fill="${col}"/>${full} fill="url(#${P}wv)"/>${full} fill="url(#${P}sh)"/>`;
+ }else if(c.mat===1){
+  fill=`${full} fill="${col}"/>`+[0.5].map(()=>{let s='';const n=Math.round((x1-x0)/10);
+   for(let i=0;i<n;i++){const t=(i+.5)/n;s+=`<circle cx="${X(t).toFixed(1)}" cy="${G.Y(t,h*.55).toFixed(1)}" r="1.6" fill="${shade(col,-.22)}"/>`;
+    if(i%2)s+=`<circle cx="${X(t).toFixed(1)}" cy="${G.Y(t,h*1.25).toFixed(1)}" r="1.2" fill="${shade(col,-.22)}"/>`}
+   return s}).join('')+`${full} fill="url(#${P}sh)" opacity=".5"/>`;
+  const n=Math.round((x1-x0)/13);let sc='';
+  for(let i=0;i<n;i++){const t=(i+.5)/n;sc+=`<circle cx="${X(t).toFixed(1)}" cy="${G.Y(t,2*h).toFixed(1)}" r="7" fill="${col}" stroke="${outline}" stroke-width="1.2"/>`}
+  back+=sc;
+ }else if(c.mat===2){
+  /* 皮革：消光。Soba 10/26 19:21：不要皺褶；光影＝中間亮、邊緣微暗，像金屬的分段亮暗但沒有中間的漸變（硬邊、平塗） */
+  const band=(a,b,fc)=>{const d1=2*h*a,d2=2*h*b,yy=(t,d)=>G.Y(t,d).toFixed(1);return `<path d="M${x0-30},${yy(0,d1)} ${G.poly(d1,0,1).replace(/^M/,'L')}L${x1+30},${yy(1,d1)} L${x1+30},${yy(1,d2)} ${G.poly(d2,1,0).replace(/^M/,'L')}L${x0-30},${yy(0,d2)}Z" fill="${fc}"/>`};
+  fill=`${full} fill="${col}"/>`+band(0,.27,shade(col,-.12))+band(.73,1,shade(col,-.12))+band(.27,.73,shade(col,.05));
+ }else if(c.mat===3){
+  defs+=`<linearGradient id="${P}sg" x1="0" y1="${cy-h}" x2="0" y2="${cy+h}" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="${shade(col,.15)}"/><stop offset=".6" stop-color="${col}"/><stop offset="1" stop-color="${shade(col,-.2)}"/></linearGradient>`;
+  fill=`${full} fill="url(#${P}sg)"/><path d="${G.poly(h*.5,.06,.72)}" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="${Math.max(2,h*.18).toFixed(1)}" stroke-linecap="round"/><circle cx="${X(.8).toFixed(1)}" cy="${G.Y(.8,h*.5).toFixed(1)}" r="2.2" fill="#fff" fill-opacity=".55"/>`;
+ }else if(c.mat===4){
+  const stops=[[0,-.5],[.07,.5],[.2,.15],[.29,.05],[.36,-.3],[.43,.0],[.58,.55],[.58,.3],[.72,0],[.86,.42],[.93,.1],[1,-.55]];
+  defs+=`<linearGradient id="${P}mg" x1="${x0}" y1="0" x2="${x1}" y2="0" gradientUnits="userSpaceOnUse">${stops.map(([o,f])=>`<stop offset="${o}" stop-color="${shade(col,f)}"/>`).join('')}</linearGradient>`;
+  defs+=`<linearGradient id="${P}mv" x1="0" y1="${cy-h}" x2="0" y2="${cy+h+cv}" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset=".14" stop-color="#fff" stop-opacity=".05"/><stop offset=".7" stop-color="#000" stop-opacity=".05"/><stop offset="1" stop-color="#000" stop-opacity=".38"/></linearGradient>`;
+  defs+=`<pattern id="${P}mm" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(-32)"><ellipse cx="2.5" cy="1.25" rx="2.4" ry="1.05" fill="#fff" fill-opacity=".2" stroke="#000" stroke-opacity=".5" stroke-width=".5"/><ellipse cx="0" cy="3.75" rx="2.4" ry="1.05" fill="#fff" fill-opacity=".2" stroke="#000" stroke-opacity=".5" stroke-width=".5"/><ellipse cx="5" cy="3.75" rx="2.4" ry="1.05" fill="#fff" fill-opacity=".2" stroke="#000" stroke-opacity=".5" stroke-width=".5"/></pattern>`;
+  defs+=`<pattern id="${P}mb" width="3" height="3" patternUnits="userSpaceOnUse"><path d="M0 .5H3" stroke="#fff" stroke-opacity=".25" stroke-width=".5"/><path d="M0 2H3" stroke="#000" stroke-opacity=".1" stroke-width=".5"/></pattern>`;
+  let tex='';
+  if(c.mstyle==='mesh')tex=`${full} fill="url(#${P}mm)"/>`;
+  else if(c.mstyle==='smooth')tex=`${full} fill="url(#${P}mb)"/>`;
+  else{const n=Math.round((x1-x0)/26);for(let i=1;i<n;i++){const t=i/n;tex+=`<path d="M${X(t).toFixed(1)},${G.Y(t,0).toFixed(1)} L${X(t).toFixed(1)},${G.Y(t,2*h).toFixed(1)}" stroke="#000" stroke-opacity=".45" stroke-width="1"/><path d="M${(X(t)+1).toFixed(1)},${G.Y(t,0).toFixed(1)} L${(X(t)+1).toFixed(1)},${G.Y(t,2*h).toFixed(1)}" stroke="#fff" stroke-opacity=".35" stroke-width=".8"/>`}}
+  fill=`${full} fill="url(#${P}mg)"/>${tex}${full} fill="url(#${P}mv)"/><path d="${G.poly(1.5,0,1)}" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="1.2"/><path d="${G.poly(2*h-1.5,0,1)}" fill="none" stroke="#000" stroke-opacity=".45" stroke-width="1.2"/>`;
+ }
+ let outl=`<path d="${dBand}" fill="none" stroke="${outline}" stroke-width="1.4" stroke-linejoin="round"/>`;
+ let hid='';
+ if(isHid){
+  const h2=h*.55,G2=geo(h2),metalCol='#AAB3BC',op=c.xray?.3:1;
+  const col2=c.col2||shade(col,lum(col)>150?-.28:.4);
+  defs+=`<linearGradient id="${P}hg" x1="0" y1="${cy-h2}" x2="0" y2="${cy+h2}" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="${shade(metalCol,.55)}"/><stop offset=".5" stop-color="${shade(metalCol,-.12)}"/><stop offset="1" stop-color="${shade(metalCol,.3)}"/></linearGradient>`;
+  defs+=`<pattern id="${P}pd" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r="1.9" fill="${col2}"/><circle cx="9" cy="9" r="1.9" fill="${col2}"/></pattern>`;
+  defs+=`<pattern id="${P}ps" width="11" height="11" patternUnits="userSpaceOnUse" patternTransform="rotate(38)"><rect width="4.5" height="11" fill="${col2}"/></pattern>`;
+  const shape=(id,d,bw,tf)=>{
+   defs+=`<clipPath id="${P}${id}"><path d="${d}"/></clipPath>`;
+   const R=`x="-500" y="-300" width="1300" height="900"`;
+   return `<g${tf?` transform="${tf}"`:''}><g clip-path="url(#${P}${id})"><rect ${R} fill="${col}" fill-opacity="${op}"/>`+
+    (c.pat==='dots'?`<rect ${R} fill="url(#${P}pd)" fill-opacity="${op}"/>`:c.pat==='stripe'?`<rect ${R} fill="url(#${P}ps)" fill-opacity="${op*.85}"/>`:'')+
+    `<rect ${R} fill="url(#${P}sh)" fill-opacity="${op*.7}"/>`+
+    (c.pat==='border'?`<path d="${d}" fill="none" stroke="${col2}" stroke-opacity="${op}" stroke-width="${bw*2}"/>`:'')+
+    `</g><path d="${d}" fill="none" stroke="#3B2F25" stroke-opacity="${c.xray?.5:1}" stroke-width="1.2" stroke-linejoin="round"/></g>`};
+  // band (folded scarf, soft wavy edges)
+  let top='',bot='';const N=30,hb=h*.9;
+  for(let i=0;i<=N;i++){const t=i/N;top+=`${i?'L':'M'}${X(t).toFixed(1)},${(G.Y(t,h-hb)+Math.sin(t*Math.PI*3)*1.6).toFixed(1)} `}
+  for(let i=N;i>=0;i--){const t=i/N;bot+=`L${X(t).toFixed(1)},${(G.Y(t,h+hb)+Math.sin(t*Math.PI*3+1.2)*1.6).toFixed(1)} `}
+  const dS=top+bot+'Z';
+  const kt=c.knot==='front'?.5:.78,kx=X(kt),ky=G.Y(kt,h);
+  const L=Math.min(c.tail*(worn?1.1:1.2),worn?118:100),w=Math.max(20,h*1.2);
+  const tailD=`M-6,0 L6,0 L${w},${(L*.58).toFixed(1)} L0,${L} L${-w},${(L*.58).toFixed(1)} Z`;
+  const rx=h*.78,ry=h*.68;
+  const knotD=`M${(kx-rx).toFixed(1)},${ky.toFixed(1)} a${rx.toFixed(1)},${ry.toFixed(1)} 0 1 0 ${(2*rx).toFixed(1)},0 a${rx.toFixed(1)},${ry.toFixed(1)} 0 1 0 ${(-2*rx).toFixed(1)},0Z`;
+  hid=(c.xray?`<path d="${G2.d(Math.min(10,h2))}" fill="url(#${P}hg)" stroke="#4A525A" stroke-width="1.4"/>`:'')+
+   shape('sb',dS,5)+
+   shape('t1',tailD,5,`translate(${(kx+3).toFixed(1)},${(ky+2).toFixed(1)}) rotate(17)`)+
+   shape('t2',tailD,5,`translate(${(kx-3).toFixed(1)},${(ky+2).toFixed(1)}) rotate(-19)`)+
+   shape('sk',knotD,4)+
+   `<path d="M${(kx-rx*.6).toFixed(1)},${(ky-ry*.1).toFixed(1)} l${(rx*.7).toFixed(1)},${(ry*.7).toFixed(1)} M${(kx-rx*.1).toFixed(1)},${(ky-ry*.55).toFixed(1)} l${(rx*.7).toFixed(1)},${(ry*.8).toFixed(1)}" fill="none" stroke="#000" stroke-opacity=".25" stroke-width="1.1" stroke-linecap="round"/>`;
+  outl='';fill='';
+ }
+ // stitch
+ let st='';
+ if(c.stitch!=='none'&&!isHid){
+  const sc=lum(col)>150?shade(col,-.42):shade(col,.55);
+  const ln=(dy,da)=>`<path d="${G.poly(dy,.015,.985)}" fill="none" stroke="${sc}" stroke-width="1.2" ${da?`stroke-dasharray="${da}"`:''} stroke-linecap="round" stroke-opacity=".9"/>`;
+  if(c.stitch==='dash')st=ln(5.5,'5 3.5')+ln(2*h-5.5,'5 3.5');
+  else st=ln(4,'')+ln(2*h-4,'')+ln(8.5,'4 3')+ln(2*h-8.5,'4 3');
+ }
+ // trim
+ let tr='';
+ if(!isHid||c.xray){
+  const G3=isHid?geo(h*.55):G,hh=isHid?h*.55:h;
+  if(c.trim==='studs'){const n=Math.round((x1-x0)/22);for(let i=0;i<n;i++){const t=(i+.5)/n;tr+=`<circle cx="${X(t).toFixed(1)}" cy="${G3.Y(t,hh).toFixed(1)}" r="3.4" fill="${acc}" stroke="${shade(acc,-.45)}" stroke-width=".9"/><circle cx="${(X(t)-.9).toFixed(1)}" cy="${(G3.Y(t,hh)-.9).toFixed(1)}" r="1" fill="#fff" fill-opacity=".7"/>`}}
+  else if(c.trim==='stripe'){tr=`<path d="${G3.poly(hh,.02,.98)}" fill="none" stroke="${lum(col)>150?shade(col,-.3):shade(col,.45)}" stroke-width="${Math.max(3,hh*.28).toFixed(1)}" stroke-linecap="round"/>`}
+  else if(isBow){
+   /* 垂墜的扁緞帶蝴蝶結（Soba 10/26 19:35 參考圖：藏青緞帶中間一顆珍珠）：兩翼寬而扁、幾乎橫著；兩條尾巴筆直下垂、尾端斜剪；用有寬度的帶子片（多邊形）畫，不是細線 */
+   const bx=X(.5),by=G3.Y(.5,hh),bc=shade(col,lum(col)>150?-.14:.22),dk='#3B2F25',s=Math.min(hh*1.15,28),kn=Math.max(3.4,s*.2),f=n=>n.toFixed(1);
+   const poly=pts=>`M${pts.map(q=>f(q[0])+','+f(q[1])).join(' L')}Z`;
+   const st=(fc)=>`fill="${fc}" stroke="${dk}" stroke-width="1.1" stroke-linejoin="round"`;
+   const wing=m=>[[bx+m*kn*.8,by-s*.3],[bx+m*s*1.0,by-s*.55],[bx+m*s*1.95,by-s*.62],[bx+m*s*2.05,by+s*.4],[bx+m*s*1.0,by+s*.38],[bx+m*kn*.8,by+s*.3]];
+   const fold=m=>[[bx+m*kn*.8,by-s*.3],[bx+m*s*1.0,by-s*.55],[bx+m*s*1.0,by+s*.38],[bx+m*kn*.8,by+s*.3]];
+   const tw=s*.62,len=s*2.9;
+   const tail=(m,l)=>[[bx+m*kn*.2,by+kn*.5],[bx+m*(kn*.2+tw),by+kn*.5],[bx+m*(kn*.2+tw+s*.42),by+l],[bx+m*(kn*.2+s*.42),by+l-s*.4]];
+   tr=`<path d="${poly(tail(-1,len))}" ${st(bc)}/><path d="${poly(tail(1,len*1.05))}" ${st(bc)}/>`+
+    `<path d="${poly(wing(-1))}" ${st(bc)}/><path d="${poly(wing(1))}" ${st(bc)}/>`+
+    `<path d="${poly(fold(-1))}" fill="${shade(bc,-.14)}" stroke="${dk}" stroke-width=".8" stroke-linejoin="round"/><path d="${poly(fold(1))}" fill="${shade(bc,-.14)}" stroke="${dk}" stroke-width=".8" stroke-linejoin="round"/>`+
+    (c.trim==='bowgem'?brooch(bx,by,kn,acc,dk,P):`<rect x="${f(bx-kn)}" y="${f(by-kn*1.2)}" width="${f(kn*2)}" height="${f(kn*2.4)}" rx="${f(kn*.3)}" fill="${shade(bc,-.18)}" stroke="${dk}" stroke-width="1"/>`)}
+ }
+ // clasp
+ let cl='';
+ if(showHW&&c.clasp!=='none'&&!(worn&&c.cpos!=='side')){
+  const G3=isHid?geo(h*.55):G,hh=isHid?h*.55:h;
+  const pos=c.cpos==='side'?'side':'back',t=pos==='back'?.93:.8;
+  /* 後頸扣具（Soba 10/26 19:49）：平放時要貼齊項圈的末端；磁吸是左右各一片 */
+  const rrE=(c.mat===1?0:rr)*.7,hw0={buckle:11,fold:23,lock:10,snap:8}[c.clasp]||10,back=pos==='back';
+  const x=back?X(1)+rrE-hw0-2:X(t),y=G3.Y(back?1:t,hh),hw=hh*.78,dk=shade(acc,-.45);
+  if(c.clasp==='fold'){const base=c.mat===4?col:acc,H=2*hh+5,W=36,x2=x-W/2,y2=y-H/2;
+   defs+=`<linearGradient id="${P}fc" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${shade(base,.5)}"/><stop offset=".3" stop-color="${shade(base,.05)}"/><stop offset=".3" stop-color="${shade(base,-.3)}"/><stop offset=".5" stop-color="${shade(base,-.1)}"/><stop offset=".5" stop-color="${shade(base,.45)}"/><stop offset=".85" stop-color="${shade(base,.1)}"/><stop offset="1" stop-color="${shade(base,-.35)}"/></linearGradient><pattern id="${P}fb" width="2" height="2" patternUnits="userSpaceOnUse"><path d="M.5 0V2" stroke="#fff" stroke-opacity=".28" stroke-width=".5"/></pattern>`;
+   const dk2=shade(base,-.6);
+   cl=`<rect x="${x2-5}" y="${y-H*.3}" width="6" height="${H*.6}" rx="2.5" fill="${shade(base,-.35)}" stroke="${dk2}" stroke-width="1"/><rect x="${x2}" y="${y2}" width="${W}" height="${H}" rx="3" fill="url(#${P}fc)" stroke="${dk2}" stroke-width="1.2"/><rect x="${x2}" y="${y2}" width="${W}" height="${H}" rx="3" fill="url(#${P}fb)"/><path d="M${x+1},${y2+1} V${y2+H-1}" stroke="${dk2}" stroke-width="1" stroke-opacity=".8"/><path d="M${x2+2},${y2+1.5} H${x2+W-2}" stroke="#fff" stroke-opacity=".6" stroke-width="1"/><rect x="${x2+W-1}" y="${y-H*.18}" width="4" height="${H*.36}" rx="1.5" fill="${shade(base,-.25)}" stroke="${dk2}" stroke-width=".9"/>`}
+  else if(c.clasp==='buckle')cl=`<rect x="${x-8}" y="${y-hw}" width="16" height="${2*hw}" rx="2.5" fill="none" stroke="${acc}" stroke-width="3"/><rect x="${x-8}" y="${y-hw}" width="16" height="${2*hw}" rx="2.5" fill="none" stroke="${dk}" stroke-width=".8"/><path d="M${x-3},${y} L${x+16},${y}" stroke="${acc}" stroke-width="2.2" stroke-linecap="round"/>`;
+  else if(c.clasp==='lock')cl=`<path d="M${x-5},${y-4} v-5 a5,5 0 0 1 10,0 v5" fill="none" stroke="${acc}" stroke-width="2.4"/><rect x="${x-8}" y="${y-4}" width="16" height="13" rx="2.5" fill="${acc}" stroke="${dk}" stroke-width="1"/><circle cx="${x}" cy="${y+2}" r="1.8" fill="${dk}"/><path d="M${x},${y+2} v4" stroke="${dk}" stroke-width="1.4"/>`;
+  else if(c.clasp==='magnet'){
+   if(back){defs+=`<linearGradient id="${P}mgn" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${shade(acc,.5)}"/><stop offset=".5" stop-color="${acc}"/><stop offset="1" stop-color="${shade(acc,-.3)}"/></linearGradient>`;
+    const pw=13,ph=hh*1.5,E1=X(1)+rrE,E0=X(0)-rrE,yR=G3.Y(1,hh),yL=G3.Y(0,hh);
+    cl=`<rect x="${(E1-pw).toFixed(1)}" y="${(yR-ph/2).toFixed(1)}" width="${pw}" height="${ph.toFixed(1)}" rx="3.5" fill="url(#${P}mgn)" stroke="${dk}" stroke-width="1"/><circle cx="${(E1-pw/2).toFixed(1)}" cy="${yR.toFixed(1)}" r="2.2" fill="${shade(acc,-.35)}"/>`+
+       `<rect x="${E0.toFixed(1)}" y="${(yL-ph/2).toFixed(1)}" width="${pw}" height="${ph.toFixed(1)}" rx="3.5" fill="url(#${P}mgn)" stroke="${dk}" stroke-width="1"/><circle cx="${(E0+pw/2).toFixed(1)}" cy="${yL.toFixed(1)}" r="2.2" fill="${shade(acc,-.35)}"/>`}
+   else cl=`<rect x="${x-11}" y="${y-hw*.6}" width="9" height="${hw*1.2}" rx="3" fill="${acc}" stroke="${dk}" stroke-width="1"/><rect x="${x+2}" y="${y-hw*.6}" width="9" height="${hw*1.2}" rx="3" fill="${acc}" stroke="${dk}" stroke-width="1"/>`}
+  else if(c.clasp==='snap')cl=`<circle cx="${x}" cy="${y}" r="7" fill="${acc}" stroke="${dk}" stroke-width="1.1"/><circle cx="${x}" cy="${y}" r="3.6" fill="${shade(acc,.35)}" stroke="${dk}" stroke-width=".8"/>`;
+ }
+ // charm
+ let ch='';
+ if(c.charm!=='none'&&showHW){
+  const hh=isHid?h*.55:h,G3=isHid?geo(hh):G,cx=X(.5),base=G3.Y(.5,2*hh)+(c.mat===1?5:0),dk=shade(acc,-.45),hi=shade(acc,.5);
+  const link=`<circle cx="${cx}" cy="${base+3}" r="3.4" fill="none" stroke="${acc}" stroke-width="1.8"/>`;
+  if(c.charm==='ring')ch=`<circle cx="${cx}" cy="${base+11}" r="8" fill="none" stroke="${acc}" stroke-width="3.2"/><circle cx="${cx}" cy="${base+11}" r="8" fill="none" stroke="${dk}" stroke-width=".7"/>`;
+  else if(c.charm==='bell')ch=link+`<circle cx="${cx}" cy="${base+15}" r="9" fill="${acc}" stroke="${dk}" stroke-width="1.1"/><path d="M${cx-9},${base+16} H${cx+9}" stroke="${dk}" stroke-width="1.2"/><circle cx="${cx}" cy="${base+19}" r="1.6" fill="${dk}"/><circle cx="${cx-3.2}" cy="${base+11.5}" r="2" fill="${hi}" fill-opacity=".8"/>`;
+  else if(c.charm==='tag')ch=link+`<rect x="${cx-10}" y="${base+7}" width="20" height="27" rx="4" fill="${acc}" stroke="${dk}" stroke-width="1.1"/><circle cx="${cx}" cy="${base+12}" r="2" fill="${dk}"/><path d="M${cx-5},${base+21} h10 M${cx-5},${base+26} h7" stroke="${dk}" stroke-width="1.2" stroke-linecap="round"/>`;
+  else if(c.charm==='gem')ch=link+`<path d="M${cx},${base+7} L${cx+10},${base+17} L${cx},${base+35} L${cx-10},${base+17}Z" fill="${acc}" stroke="${dk}" stroke-width="1.1" stroke-linejoin="round"/><path d="M${cx-10},${base+17} H${cx+10} M${cx},${base+7} L${cx-4},${base+17} L${cx},${base+35} L${cx+4},${base+17}Z" fill="none" stroke="${hi}" stroke-width=".9" stroke-opacity=".8"/>`;
+  else if(c.charm==='key')ch=link+`<circle cx="${cx}" cy="${base+13}" r="6" fill="none" stroke="${acc}" stroke-width="3"/><path d="M${cx},${base+19} V${base+37} M${cx},${base+30} h6 M${cx},${base+36} h4" stroke="${acc}" stroke-width="2.6" stroke-linecap="round"/>`;
+ }
+ const wrap=worn?`<g clip-path="url(#${P}c)"><rect x="0" y="0" width="360" height="270" fill="url(#${P}wr)"/></g>`:'';
+ let vb=worn?'0 0 360 270':(isHid?'0 0 360 210':'0 0 360 170');
+ if(o.crop){const pad=6,bow=isBow&&showHW,top=bow?16:pad,hasCharm=c.charm!=='none'&&showHW;const ext=Math.max(pad+4,(c.mat===1?0:rr)+4,o.lugs?14:0);vb=`${x0-ext} ${cy-h-top} ${x1-x0+2*ext} ${2*h+cv+top+pad+(isHid?Math.min(c.tail*1.2,100)+8:(hasCharm||bow?(bow?76:40):0))+(c.mat===1?6:0)}`}
+ return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb}" ${o.w?`width="${o.w}"`:''} class="${o.cls||''}"><defs>${defs}</defs>${back}${isHid?hid:`<g clip-path="url(#${P}c)">${fill}</g>${outl}`}${wrap}${st}${tr}${cl}${ch}</svg>`;
+}
+
+
+
+/* ---------- 退休後的項圈紀念品（10/26 構想，Soba 未定案）：布→寬織帶手機掛繩、皮革→短皮革手機鍊、金屬→錶帶 ---------- */
+const KEEP_LABEL={0:'手機掛繩（布）',2:'皮革手機鍊',4:'錶帶'};
+const KEEP_NO={1:'蕾絲太輕薄，留不住，不做紀念品。',3:'矽膠很不適合改造，只能原樣收起來。'};
+function hardware(cx,cy,acc){const dk=shade(acc,-.45);
+ return `<circle cx="${cx}" cy="${cy}" r="7" fill="none" stroke="${acc}" stroke-width="2.8"/><circle cx="${cx}" cy="${cy}" r="7" fill="none" stroke="${dk}" stroke-width=".7"/><circle cx="${cx}" cy="${cy+9.5}" r="2.6" fill="${acc}" stroke="${dk}" stroke-width=".8"/>`+
+  `<path d="M${cx-6},${cy+16} Q${cx-10},${cy+34} ${cx},${cy+40} Q${cx+10},${cy+34} ${cx+6},${cy+16} Q${cx},${cy+10} ${cx-6},${cy+16}Z" fill="none" stroke="${acc}" stroke-width="2.6" stroke-linejoin="round"/><path d="M${cx+6},${cy+17} L${cx+4},${cy+33}" stroke="${dk}" stroke-width="1.4" stroke-linecap="round"/>`}
+function keepCloth(c,o){const P=o.pfx||'k',col=c.color||MATS[0].c,acc=c.acc;
+ const w=Math.max(26,Math.min(44,c.width*.85)),x=100-w/2,top=22,bot=168,r=w/2;
+ const d=`M${x},${bot} L${x},${top+r} A${r},${r} 0 0 1 ${x+w},${top+r} L${x+w},${bot}Z`;
+ const sc=lum(col)>150?shade(col,-.4):shade(col,.55);
+ const defs=`<clipPath id="${P}c"><path d="${d}"/></clipPath><pattern id="${P}wv" width="4" height="4" patternUnits="userSpaceOnUse"><path d="M0 1H4M0 3H4" stroke="#fff" stroke-opacity=".28" stroke-width=".8"/><path d="M1 0V4M3 0V4" stroke="#000" stroke-opacity=".07" stroke-width=".8"/></pattern><linearGradient id="${P}vg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity=".25"/><stop offset=".5" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".2"/></linearGradient>`;
+ const R=`x="0" y="0" width="200" height="280"`;
+ const col2=c.col2||shade(col,lum(col)>150?-.28:.4);
+ const PATD=`<pattern id="${P}pd" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r="1.9" fill="${col2}"/><circle cx="9" cy="9" r="1.9" fill="${col2}"/></pattern><pattern id="${P}ps" width="11" height="11" patternUnits="userSpaceOnUse" patternTransform="rotate(38)"><rect width="4.5" height="11" fill="${col2}"/></pattern>`;
+ const PATK=c.pat==='dots'?`<rect ${R} fill="url(#${P}pd)"/>`:c.pat==='stripe'?`<rect ${R} fill="url(#${P}ps)" fill-opacity=".85"/>`:c.pat==='border'?`<path d="${d}" fill="none" stroke="${col2}" stroke-width="10"/>`:'';
+ const body=`<g clip-path="url(#${P}c)"><rect ${R} fill="${col}"/><rect ${R} fill="url(#${P}wv)"/>${PATK}<rect ${R} fill="url(#${P}vg)"/><path d="M${x+5},${top} V${bot} M${x+w-5},${top} V${bot}" stroke="${sc}" stroke-width="1.2" stroke-dasharray="5 3.5" fill="none"/><path d="M${100},${top+r+30} V${bot}" stroke="#000" stroke-opacity=".18" stroke-width="1"/></g><path d="${d}" fill="none" stroke="#3B2F25" stroke-width="1.4" stroke-linejoin="round"/>`;
+ const tab=`<rect x="${x-3}" y="${bot-8}" width="${w+6}" height="30" rx="3" fill="#B9773F" stroke="#3B2F25" stroke-width="1.2"/><rect x="${x}" y="${bot-5}" width="${w}" height="24" rx="2" fill="none" stroke="#E8C79A" stroke-width="1" stroke-dasharray="3 2.5"/><circle cx="100" cy="${bot+7}" r="3" fill="${acc}" stroke="${shade(acc,-.45)}" stroke-width=".8"/>`;
+ return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 280" ${o.w?`width="${o.w}"`:''}><defs>${defs}${PATD}</defs>${body}${tab}${hardware(100,bot+42,acc)}</svg>`}
+function keepLeather(c,o){const P=o.pfx||'k',col=c.color||MATS[2].c,acc=c.acc,dk=shade(acc,-.45);
+ const w=Math.max(14,Math.min(24,c.width*.42)),x=100-w/2,top=20,bot=150,r=w/2;
+ const d=`M${x},${bot} L${x},${top+r} A${r},${r} 0 0 1 ${x+w},${top+r} L${x+w},${bot}Z`;
+ const defs=`<clipPath id="${P}c"><path d="${d}"/></clipPath><linearGradient id="${P}lg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${shade(col,.14)}"/><stop offset=".35" stop-color="${col}"/><stop offset="1" stop-color="${shade(col,-.18)}"/></linearGradient><pattern id="${P}gr" width="6" height="6" patternUnits="userSpaceOnUse"><circle cx="1.5" cy="1.5" r=".7" fill="#000" fill-opacity=".14"/><circle cx="4.5" cy="4.5" r=".6" fill="#000" fill-opacity=".1"/></pattern><linearGradient id="${P}pg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${shade(acc,.55)}"/><stop offset=".45" stop-color="${acc}"/><stop offset="1" stop-color="${shade(acc,-.3)}"/></linearGradient>`;
+ const R=`x="0" y="0" width="200" height="280"`,sc=shade(col,.5);
+ const strap=`<g clip-path="url(#${P}c)"><rect ${R} fill="${col}"/><rect x="${x}" y="0" width="${w*.27}" height="280" fill="${shade(col,-.12)}"/><rect x="${x+w*.73}" y="0" width="${w*.27}" height="280" fill="${shade(col,-.12)}"/><rect x="${x+w*.27}" y="0" width="${w*.46}" height="280" fill="${shade(col,.05)}"/><path d="M${x+3},${top+4} V${bot} M${x+w-3},${top+4} V${bot}" stroke="${sc}" stroke-width="1" stroke-dasharray="3.5 2.5" fill="none"/></g><path d="${d}" fill="none" stroke="#2b1d14" stroke-width="1.3" stroke-linejoin="round"/><circle cx="100" cy="${top+r+1}" r="2.4" fill="#000" fill-opacity=".4"/>`;
+ const keeper=`<rect x="${x-3}" y="62" width="${w+6}" height="17" rx="3.5" fill="${shade(col,-.12)}" stroke="#2b1d14" stroke-width="1.2"/><circle cx="100" cy="70.5" r="3.7" fill="${acc}" stroke="${dk}" stroke-width="1"/><circle cx="99" cy="69.5" r="1.1" fill="#fff" fill-opacity=".7"/>`;
+ const sleeve=`<rect x="${x-3}" y="${bot-6}" width="${w+6}" height="32" rx="4" fill="url(#${P}pg)" stroke="${dk}" stroke-width="1.1"/><path d="M${x+2},${bot+8} h${w-4}" stroke="${dk}" stroke-width=".8" stroke-opacity=".7"/>`;
+ return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 280" ${o.w?`width="${o.w}"`:''}><defs>${defs}</defs><g transform="rotate(-14 100 140)">${strap}${keeper}${sleeve}${hardware(100,bot+44,acc)}</g></svg>`}
+function renderKeep(c,o){o=o||{};const m=c.mat;
+ if(m===0)return {svg:keepCloth(c,o),label:KEEP_LABEL[0]};
+ if(m===2)return {svg:keepLeather(c,o),label:KEEP_LABEL[2]};
+ if(m===4){const cfg=Object.assign({},c,{mat:4,clasp:'fold',cpos:'side',width:Math.max(36,Math.min(48,c.width)),curve:34,edge:'square',charm:'none',trim:'none',stitch:'none'});
+  return {svg:render(cfg,'flat',Object.assign({},o,{crop:1,span:[78,282],lugs:1})),label:KEEP_LABEL[4],wide:1}}
+ if(m===5){const pf=o.pfx||'k';const a=keepCloth(Object.assign({},c,{mat:0,color:c.color||MATS[5].c}),Object.assign({},o,{pfx:pf+'a'}));
+  const b=renderKeep(Object.assign({},c,{mat:4,color:null}),Object.assign({},o,{pfx:pf+'b'}));
+  return {multi:[{svg:a,label:'手機掛繩（用外層的布）'},{svg:b.svg,label:'錶帶（用內層的金屬）',wide:1}]}}
+ return {svg:null,note:KEEP_NO[m]||'不做成紀念品。'}}
+
+/* 遊戲用：每種材質一款固定造型（同一種材質同一個造型）。mi=材質編號 0..5，ct=厚度級別 0..3 */
+const PRESET=[
+ {clasp:'snap',stitch:'dash'},                         /* 布 */
+ {clasp:'snap',edge:'square'},                         /* 蕾絲 */
+ {clasp:'buckle',stitch:'dash'},                       /* 皮革 */
+ {clasp:'magnet'},                                     /* 矽膠 */
+ {clasp:'fold',mstyle:'mesh'},                         /* 金屬 */
+ {knot:'side',pat:'plain',tail:60}];                   /* 隱藏金屬 */
+const WIDTH=[32,40,52,40];
+function presetFor(mi,ct){return Object.assign({},DEF,{mat:mi,width:WIDTH[ct]||40,curve:12},PRESET[mi]||{})}
+return {MATS,PAL,ACC,METALS,DEF,shade,lum,render,renderKeep,presetFor};
+})();
+
 /* ---------- 覺醒前後的日常落差 ---------- */
 const PRE=[['同學們在聊昨天誰身上的味道，你一個字也插不上。',{ease:-1}],['班上有人說「他今天好香」，你湊過去，什麼也沒聞到，只好跟著點頭。',{ease:-1}],['大家都在傳誰分化了，你看見每個人臉上的表情，卻不知道他們聞到了什麼。',{}],['老師進教室，全班忽然都坐直了。你什麼也沒感覺，只覺得今天的空氣好像不一樣。',{}],['你對著家長的圍巾吸了很久，只聞到布料的味道。',{}],['你跟朋友打賭誰會先聞到東西，兩個人都在等。',{soc:1}],['有人說你什麼都聞不到真好，不用被別人的味道影響。你笑了笑，不確定這算不算安慰。',{}],['保健室的老師說，聞不到是正常的，每個人時間不同。你點點頭，還是有點急。',{}]];
 const MON_B={'過年，親戚輪流上門，每個人都在討論你的味道有沒有變。':'過年，親戚輪流上門，每個人都在問你交了朋友沒、成績怎麼樣。','開學第一週，教室裡又擠滿了新舊混雜的味道。':'開學第一週，教室裡擠滿了混在一起的味道，你分不出哪些是人、哪些是新課本。','段考快到了，全班的味道都變得緊繃。':'段考快到了，全班安靜得有點緊繃，你只聞到一股說不出來的悶味。','梅雨季，教室裡濕濕的，有人的味道被悶得更重了。':'梅雨季，教室裡濕濕的，空氣悶得更重了，你只分得出是濕鞋子還是別的什麼。','悶熱的夏天，電風扇吹來的全是別人的味道。':'悶熱的夏天，電風扇吹來的全是混在一起的味道，你分不出誰是誰。'};
@@ -1958,7 +2209,7 @@ function render(){
   if(showKid){const ci=coupleInfo(S);$('#kb').setAttribute('aria-pressed',S.avoid);$('#kb').textContent=S.avoid?'避免':'順其自然';$('#kc').textContent='懷孕方：'+(ci.carrier==='me'?'我':'伴侶');$('#kn').textContent='一年約 '+pct(S.avoid?ci.p*.1:ci.p)}
   const cbx=$('#collarbox');
   const showCollar=S.collarOn&&!S.marked&&!S.mDone;
-  cbx.hidden=!showCollar;
+  cbx.hidden=!showCollar;if(!showCollar){const pv0=$('#cpv');pv0.hidden=true;pv0.dataset.k=''}
   if(showCollar){$('#cb').setAttribute('aria-pressed',S.collar);$('#cb').textContent=S.collar?'戴':'不戴';
     const sel=$('#ct');sel.hidden=!S.collar;
     /* 材質不受區域限制，買不起的直接顯示「買不起」（10/23 你定）；隱藏金屬只有 Omega 看得到 */
@@ -1970,6 +2221,8 @@ function render(){
     if(sel.dataset.sig!==sig){sel.dataset.sig=sig;sel.innerHTML=ms.map(([m,i])=>`<option value="${i}"${m.c>mc?' disabled':''}>${m.n}型（${['輕薄','普通','厚重','訂製'][m.c]}）${m.c>mc?'・買不起':''}</option>`).join('')}
     sel.value=S.cmi;
     const c=CT[S.ctype];
+    /* 項圈預覽（10/26）：同一種材質同一個造型，240px（10/26 Soba：電腦至少要 240 才看得清楚，手機 150 也可以）；造型由 10d_collar_art.js 決定（與 collar/ 設計器共用） */
+    {const pv=$('#cpv'),key=S.collar?S.cmi+'|'+S.ctype:'';if(pv.dataset.k!==key){pv.dataset.k=key;pv.hidden=!S.collar;pv.innerHTML=S.collar?CollarArt.render(CollarArt.presetFor(S.cmi||0,S.ctype||0),'flat',{pfx:'gp',crop:1,w:240}):''}}
     const nd=needType(S.attr||0);$('#cn').textContent=S.collar?(S.attr>c.cap?`你的吸引力 ${S.attr.toFixed(1)}，擋不太住`:S.ctype>nd?`吸引力 ${S.attr.toFixed(1)}，比需要的厚。擋得住，但有點喘，也更體面`:`吸引力 ${S.attr.toFixed(1)}，擋得住`):'自由，但有風險'}
   const st=$('#stage');
   const aq=S.askQ[0];
@@ -2081,14 +2334,14 @@ function perfumeIcon(c){return `<svg viewBox="0 0 80 120" width="40" height="60"
 function renderKeeps(){
   const kb=$('#keeps');const ks=(S.keeps||[]);kb.hidden=false;kb.classList.toggle('empty',!ks.length);if(!ks.length){$('#klist').innerHTML='<div class="kempty">還沒有收到任何東西。情書、禮物、香水和項圈，之後都會收在這裡。</div>';return}
   const CAP={letter:'封',gift:'件',scent:'瓶',collar:'條',craft:'件',token:'件'};
-  const PAL=['#FFFDF6','#F5E6E0','#E4EEE8','#EFE6F5'],CHIP=['#E7C46A','#B7A4D3','#8CB7A5','#E8A598','#9FC3D6'],ROT=[-3,2.5,-1.5,3.5,-2];
+  const PAL=['#FFFDF6','#F5E6E0','#E4EEE8','#EFE6F5'],CHIP=['#E7C46A','#B7A4D3','#8CB7A5','#E8A598','#9FC3D6'],ROT=[-3,2.5,-1.5,3.5,-2],LROT=[-6,4,-3,7,-5,2,-7,5],LY=[0,5,-3,6,-5,2,4,-4];
   const groups={};ks.forEach(k=>(groups[k.type]=groups[k.type]||[]).push(k));
   let h=`<div class="ktot">共 ${ks.length} 件</div>`;
   Object.keys(KEEP_TYPE).filter(t=>groups[t]).forEach(t=>{
     const arr=groups[t];
     h+=`<div class="kgrp ${t}">`+arr.slice(-30).map((k,i)=>{
       const ix=ks.indexOf(k),cl=(k.lost?' lost':'')+(KSEL===k.id?' on':'');
-      if(t==='letter')return `<button class="kcard${cl}" data-i="${ix}" style="background:${PAL[i%4]};--r:${ROT[i%5]}deg"><b>${k.name}</b><small>${k.age}歲${k.status?'・'+k.status:''}</small></button>`;
+      if(t==='letter')return `<button class="kcard${cl}" data-i="${ix}" style="background:${PAL[i%4]};--r:${LROT[(i*3)%8]}deg;--y:${LY[(i*5)%8]}px"><b>${k.name}</b><small>${k.age}歲${k.status?'・'+k.status:''}</small></button>`;
       if(t==='collar'||t==='craft')return `<button class="kpill${cl}" data-i="${ix}">${collarSVG(k.mat||0,t==='craft')}<span>${k.name}</span></button>`;
       if(t==='scent')return `<button class="kbot${cl}" data-i="${ix}">${perfumeIcon(CHIP[i%5])}<span>${k.name}</span><small>${k.age}歲</small></button>`;
       return `<button class="kchip${cl}" data-i="${ix}" style="background:${CHIP[i%5]}">${k.name}<small>${k.age}歲</small></button>`}).join('')+`</div><div class="kcap">${KEEP_TYPE[t]}　共 ${arr.length} ${CAP[t]||'件'}</div>`;
