@@ -268,7 +268,7 @@ body.qlock,body.qlock *{-webkit-user-select:none!important;user-select:none!impo
 
 </style>
 
-<div class="thmwrap"><span class="ver">Ver.0.103(Beta)</span><button id="thm" aria-expanded="false">外觀</button><div id="thmp" hidden><div class="tr"><span>模式</span><button data-m="auto">跟隨系統</button><button data-m="light">淺色</button><button data-m="dark">深色</button></div><div class="tr"><span>色系</span><button data-p="cream">米黃</button><button data-p="blue">藍</button><button data-p="pink">粉</button><button data-p="gray">灰</button><button data-p="term">終端</button></div></div></div>
+<div class="thmwrap"><span class="ver">Ver.0.111(Beta)</span><button id="thm" aria-expanded="false">外觀</button><div id="thmp" hidden><div class="tr"><span>模式</span><button data-m="auto">跟隨系統</button><button data-m="light">淺色</button><button data-m="dark">深色</button></div><div class="tr"><span>色系</span><button data-p="cream">米黃</button><button data-p="blue">藍</button><button data-p="pink">粉</button><button data-p="gray">灰</button><button data-p="term">終端</button></div></div></div>
 <div class="wrap">
  <section id="intro" class="intro">
   <div class="chart">
@@ -463,7 +463,7 @@ const idLabel=()=>S.known?ID_TXT[S.sec]:(S.scentOn?'有新氣味':(S.awake?'覺�
 const INTRO_SC=[
  {s:'sp',t:'十歲生日那天下了一場春雨。你撐著傘走回家，在巷口看見一個比你大幾歲的人蹲在地上哭，朋友在旁邊輕輕拍著他的背。你不知道發生了什麼事，只聽見有人小聲說：「他大概是分化了。」'},
  {s:'sp',t:'春天，你滿十歲了。班上的位子剛換過，你被排到窗邊，旁邊坐的人上學期好像還比你矮。老師說，從這學期開始，大家的變化會越來越明顯，要互相尊重。你點點頭，偷偷量了一下自己的手掌。'},
- {s:'su',t:'暑假的第一個星期，你和同學約在公園，輪流講自己聽來的分化傳聞。有人說 A 會在一夜之間長高，有人說 O 會莫名其妙發燒，誰也拿不出證據。最後你們約好：誰先分化，就要把過程完整講給大家聽。'},
+ {s:'su',t:'暑假的第一個星期，你和同學約在公園，輪流講自己聽來的分化傳聞。有人說 Alpha 會在一夜之間長高，有人說 Omega 會莫名其妙發燒，誰也拿不出證據。最後你們約好：誰先分化，就要把過程完整講給大家聽。'},
  {s:'su',t:'十歲的夏天，冰棒在你手上融得比你吃得快。便利商店的冷氣下，兩個高年級生在聊「抑制劑」，你不懂那是什麼，只是把冰棒舔得更慢，把耳朵豎得更高。'},
  {s:'au',t:'開學第一天，老師發了一張要家長簽名的單子，標題是「分化期注意事項」。你把它折成四折塞進書包，路上又拿出來讀了兩遍，還是只看懂一半。'},
  {s:'au',t:'你的生日蛋糕上，蠟燭被風吹滅了兩次。家長點到第三次時說：「許願吧，不過不要許『快點分化』，那個許了也沒用。」你笑著閉上眼，許了一個別的。'},
@@ -571,7 +571,7 @@ ev({id:'ex_diy_collar3',ok:s=>s.flags.diy==='ribbon'&&!s.fired.ex_diy_collar3&&i
 
 /* A/O 收味、新氣味 */
 ev({id:'scent',ok:s=>s.sec!=='B'&&s.awake&&!s.scentOn&&s.t>=s.awk+s.shou,key:1,
-  text:s=>{s.scentOn=true;s.scentAge=s.age;s.scentT=s.t;return pick([`${s.age}歲。奶味終於收完了。你的身上長出了自己的味道，不屬於 Beta。同學們都在傳你是 A 還是 O，你自己也想知道。`,`${s.age}歲。有一天你發現，路上的大人不再讓座，也不再給糖。有人下意識多看了你一眼，又很快移開視線。那層保護罩悄悄不見了，你的味道終於是你自己的。`,`${s.age}歲。奶味退光的那一週，你突然覺得世界的眼神變了：走廊上的人會自動讓出一點距離，連最喜歡摸你頭的鄰居也只是點個頭就走。你才知道，原來以前一直有人在替你擋著什麼。`])},
+  text:s=>{s.scentOn=true;s.scentAge=s.age;s.scentT=s.t;return pick([`${s.age}歲。奶味終於收完了。你的身上長出了自己的味道，不屬於 Beta。同學們都在傳你是 Alpha 還是 Omega，你自己也想知道。`,`${s.age}歲。有一天你發現，路上的大人不再讓座，也不再給糖。有人下意識多看了你一眼，又很快移開視線。那層保護罩悄悄不見了，你的味道終於是你自己的。`,`${s.age}歲。奶味退光的那一週，你突然覺得世界的眼神變了：走廊上的人會自動讓出一點距離，連最喜歡摸你頭的鄰居也只是點個頭就走。你才知道，原來以前一直有人在替你擋著什麼。`])},
   card:true,fx:{mood:5,soc:4}});
 ev({id:'test',ok:s=>s.scentOn&&!s.known&&s.t>=s.scentT+.75&&!s.flags.testAsked,once:1,
   text:s=>{s.flags.testAsked=1;return `家人問你要不要去驗腺體，可以確定分化的結果；不驗就等第一次易感期或發情期。`},
@@ -606,7 +606,7 @@ const NJ=[
 ];
 /* 工作 */
 ev({id:'job',ok:s=>s.age>=19,once:1,key:1,
-  text:s=>`十九歲，要決定做什麼工作了。${s.sec==='B'?'Beta 能選的職業最多。':'A、O 自帶影響他人的生理性，穩定出勤要求高的工作不太歡迎你。'}${highPress(s)?'老師、親戚、鄰居都說你適合當警察、保全或運動員，也有人半開玩笑說你像黑道。':''}`,
+  text:s=>`十九歲，要決定做什麼工作了。${s.sec==='B'?'Beta 能選的職業最多。':'Alpha、Omega 自帶影響他人的生理性，穩定出勤要求高的工作不太歡迎你。'}${highPress(s)?'老師、親戚、鄰居都說你適合當警察、保全或運動員，也有人半開玩笑說你像黑道。':''}`,
   choices:[
    {t:'一般公司上班（出勤穩定）',run:s=>s.job='上班族',res:null,
      fx:null,after:s=>s.sec==='B'?{fam:8,soc:2}:{fam:2,mood:-3}},
@@ -1258,7 +1258,7 @@ ev({id:'ex_milk_teased',ok:s=>s.awake&&!s.known&&s.sec!=='B'&&s.age>=12&&s.age<=
 ev({id:'ex_early_mature',ok:s=>s.known&&s.sec!=='B'&&s.shou<1&&s.age>=14&&s.age<=17&&!s.fired.ex_early_mature&&cp(.4),once:1,
   text:s=>`你的奶味退得比同學早，老師開始用「懂事」「成熟」來形容你，有人羨慕，有人不太敢靠近。`,fx:{soc:2,mood:1}});
 ev({id:'ex_trip',ok:s=>s.age>=15&&s.age<=17&&s.awake&&!s.fired.ex_trip&&cp(.25),once:1,
-  text:s=>`畢旅分房，老師特別把 A、O、B 錯開，Beta 同學被拉去當緩衝，你被分到一間氣味很淡的房。`,fx:{soc:1}});
+  text:s=>`畢旅分房，老師特別把 Alpha、Beta、Omega 錯開，Beta 同學被拉去當緩衝，你被分到一間氣味很淡的房。`,fx:{soc:1}});
 ev({id:'ex_fashion',ok:s=>s.awake&&s.age>=15&&s.age<=19&&!s.fired.ex_fashion&&cp(.3),once:1,
   text:s=>`班上開始流行噴香水，有人用的是家長的，有人用的是自己亂調的。你站在走廊上聞了一整排人的味道，頭有點暈。`,fx:{soc:1}});
 ev({id:'ex_admire',ok:s=>s.age>=10&&s.age<=14&&!s.awake&&!s.fired.ex_admire&&cp(.3),once:1,
@@ -1485,7 +1485,7 @@ ev({id:'menoEnd',ok:s=>s.sec!=='B'&&s.flags.menoStart&&!s.mDone&&s.t>=s.mEnd+1,o
   text:s=>{s.mDone=true;const w=s.sec==='O'&&!s.marked;if(w){s.collarOn=false}return s.sec==='O'?`${s.age}歲。最後一次發情期過去已滿一年，正式結束。${w?'你把項圈收進抽屜，第一次不戴任何東西走在街上。':'你和伴侶一起走過了這一關。'}`:`${s.age}歲。易感期完全停止了，隔離室再也不會有你的名字。`},fx:{mood:6,hea:-2}});
 
 /* 隨年齡的事件 */
-ev({id:'hs',ok:s=>s.age>=16&&s.age<=19,text:s=>`健教課終於能把 A、O、B 分開上了，大家交換著從網路上看來的傳言。${s.sec==='B'&&s.known?'你坐在最後一排，覺得好像在看別人家的事。':'你一邊聽一邊想，不知道哪一個才是自己。'}`,fx:{soc:2}});
+ev({id:'hs',ok:s=>s.age>=16&&s.age<=19,text:s=>`健教課終於能把 Alpha、Beta、Omega 分開上了，大家交換著從網路上看來的傳言。${s.sec==='B'&&s.known?'你坐在最後一排，覺得好像在看別人家的事。':'你一邊聽一邊想，不知道哪一個才是自己。'}`,fx:{soc:2}});
 ev({id:'reunion',ok:s=>s.age>=40&&s.age<=44,text:s=>s.sec==='B'?`同學會。大家都變了。有人換了香水，你聞得出是香水，卻聞不出誰的費洛蒙變了；你靠臉和說話的樣子認人，反而都認得出來。`:`同學會。大家都變了，連味道也是。有人換了香水，有人什麼都沒變，但你都聞得出來。`,fx:{soc:4,mood:2}});
 ev({id:'health',ok:s=>s.age>=50&&s.age<=54,key:1,text:s=>`五十歲，健康檢查的紅字變多了。醫生說以後要多注意生活習慣。`,fx:{hea:-6,mood:-2}});
 ev({id:'parent',ok:s=>s.age>=46&&s.age<=50,text:s=>`家長年紀大了，家裡開始需要你多回去幾趟。`,fx:{mood:-3,fam:-3,soc:2}});
@@ -1617,7 +1617,7 @@ const KL=[
  ['你注意到班上有人下課後一個人躲到頂樓，沒有人問他為什麼。',{mood:-1},12,18,1],
  ['保健室外排了一條長長的隊，每個人手上都拿著一張單子，表情各不相同。',{mood:0},12,18,1],
  ['新聞上在討論第二性別的權利，你和家長各說了一句看法，然後都沉默了。',{fam:0,mood:0},12,19,1],
- ['班上有人用「你是 A 吧？」開玩笑，立刻被其他人制止了。那個人臉紅了一整節課。',{soc:-1},12,18,1],
+ ['班上有人用「你是 Alpha 吧？」開玩笑，立刻被其他人制止了。那個人臉紅了一整節課。',{soc:-1},12,18,1],
  ['導師在班會上說「每一種都很好」，下課後有人小聲說「說得容易」。',{mood:0},12,18,1],
  ['有人在廁所裡哭，你站在門外，猶豫了很久要不要敲門。',{mood:-1},12,18,1],
  ['學校的公佈欄貼出「分化後的健康須知」，每個經過的人都假裝沒看見，卻都多看了兩眼。',{},12,18,1],
@@ -2551,32 +2551,35 @@ function drawCard(sel,scent,withEmo,side){
 }
 
 /* ---------- 結尾 ---------- */
-function ending(){autoStop();{const ab=$('#autobar');if(ab)ab.hidden=true}
-  const A=S.attrs;
-  const mood=A.joy>=62?'你這一生過得相當滿足。':A.joy>=45?'你的一生有起有落，總的說來算是平穩。':'你這一生有太多遺憾，但你走完了。';
-  const sc=S.scent?'<div class="sc" id="sc"></div>':(S.perfume?`<div class="bwrap"><svg viewBox="0 0 80 120" width="76" height="114" aria-hidden="true"><rect x="24" y="3" width="32" height="15" rx="3" fill="var(--fg)"/><rect x="30" y="18" width="20" height="13" fill="var(--line)" stroke="var(--fg)" stroke-width="1.5"/><rect x="10" y="30" width="60" height="84" rx="14" fill="var(--card)" stroke="var(--fg)" stroke-width="2"/><rect x="14" y="62" width="52" height="48" rx="11" fill="var(--m)" opacity=".75"/></svg><p style="margin:0;color:var(--mute)">Beta 沒有費洛蒙，只有自己選的香水，而香水不影響本能。<br>你最後用的是 <b style="color:var(--fg)">${S.perfume.n}</b>（${S.perfume.c}・${PF_TIER[S.perfume.t]}）。</p></div>`:`<div class="bwrap">${bottleSVG('B','eb',76,114)}<p style="margin:0;color:var(--mute)">Beta 沒有費洛蒙，只有自己選的香水，而香水不影響本能。<br>你一直沒有買過香水，瓶子是空的。</p></div>`);
-  const rows=[
+function endRows(hide){
+  return [
    ['出生區域',REGIONS[S.region0]+(S.region!==S.region0?`，最後住在${REGIONS[S.region]}`:'')],
    ['身分',ID_TXT[S.sec]+(S.known?`（${S.knownAge} 歲確定）`:'')],
    ['覺醒日',`${S.awk.toFixed(1)} 歲`+(S.awk>18?'（晚覺醒）':'')],
    S.sec!=='B'?['收味期',`${S.shou.toFixed(1)} 年`]:null,
-   S.attr!=null?['吸引力',S.attr.toFixed(1)+' / 10']:null,
+   S.attr>0?['吸引力',S.attr.toFixed(1)+' / 10']:null,
    ['生育能力',`懷孕 ${S.abil.c}、受孕 ${S.abil.s}`],
    ['費洛蒙嗅覺',SMELLW(S.smell)],
    ['職業',S.job||'—'],
-   S.friend?['老朋友',S.friend.nm||'—']:null,
-   ['伴侶',S.partner?`${S.partner.nm||''}（${ID_TXT[S.partner.t]}）${S.partner.wed?'，結婚':''}`:'一個人'],
+   S.friend&&!hide?['老朋友',S.friend.nm||'—']:null,
+   ['伴侶',S.partner?`${hide?'':(S.partner.nm||'')}（${ID_TXT[S.partner.t]}）${S.partner.wed?'，結婚':''}`:'一個人'],
    S.sec==='O'?['項圈',S.marked?'標記後卸下':`戴了 ${Math.round(S.collarYears)} 年，沒戴 ${Math.round(S.bareYears)} 年`]:null,
-   S.kids.length?['孩子',S.kids.map(k=>(k.nm||'孩子')+'（'+(k.known?ID_TXT[k.sec]:'還在長大')+'）').join('、')]:null,
+   S.kids.length?['孩子',S.kids.map(k=>(hide?'孩子':(k.nm||'孩子'))+'（'+(k.known?ID_TXT[k.sec]:'還在長大')+'）').join('、')]:null,
    S.sec!=='B'?['更年期',`${S.mStart} 歲起漸降，${S.mEnd} 歲最後一次`]:['更年期',`${S.mStart} 歲前後`],
-  ].filter(Boolean);
+  ].filter(Boolean)}
+function ending(){autoStop();{const ab=$('#autobar');if(ab)ab.hidden=true}
+  const A=S.attrs;
+  const mood=A.joy>=62?'你這一生過得相當滿足。':A.joy>=45?'你的一生有起有落，總的說來算是平穩。':'你這一生有太多遺憾，但你走完了。';
+  const sc=S.scent?'<div class="sc" id="sc"></div>':(S.perfume?`<div class="bwrap"><svg viewBox="0 0 80 120" width="76" height="114" aria-hidden="true"><rect x="24" y="3" width="32" height="15" rx="3" fill="var(--fg)"/><rect x="30" y="18" width="20" height="13" fill="var(--line)" stroke="var(--fg)" stroke-width="1.5"/><rect x="10" y="30" width="60" height="84" rx="14" fill="var(--card)" stroke="var(--fg)" stroke-width="2"/><rect x="14" y="62" width="52" height="48" rx="11" fill="var(--m)" opacity=".75"/></svg><p style="margin:0;color:var(--mute)">Beta 沒有費洛蒙，只有自己選的香水，而香水不影響本能。<br>你最後用的是 <b style="color:var(--fg)">${S.perfume.n}</b>（${S.perfume.c}・${PF_TIER[S.perfume.t]}）。</p></div>`:`<div class="bwrap">${bottleSVG('B','eb',76,114)}<p style="margin:0;color:var(--mute)">Beta 沒有費洛蒙，只有自己選的香水，而香水不影響本能。<br>你一直沒有買過香水，瓶子是空的。</p></div>`);
+  const rows=endRows(false);
   $('#stage').innerHTML=`<div class="card"><h2>六十歲，人生回顧</h2><p>${mood}</p>
     <div class="sum">${rows.map(r=>`<div><span>${r[0]}</span><span>${r[1]}</span></div>`).join('')}</div>
     <div class="sum">${[['幸福度','joy'],['財富','wealth'],['安全感','safe'],['自在','ease'],['自主','auto'],['牽絆','bond'],['道德','moral'],['名聲','fame']].map(([n,k])=>`<div><span>${n}</span><span>${Math.round(A[k])}</span></div>`).join('')}</div>
     <h3 style="margin-top:16px">你的氣味卡</h3>${sc}
-    <div class="row-end"><button class="btn" id="again">再玩一次</button></div></div>`;
+    <div class="row-end"><button class="btn" id="expng">存成圖片分享</button><button class="btn ghost" id="again">再玩一次</button></div></div>`;
   if(S.scent)drawCard('#sc',S.scent,true);
   newMrn();
+  $('#expng').onclick=openExport;
   $('#again').onclick=()=>{autoStop();{const ab=$('#autobar');if(ab)ab.hidden=false}$('#play').hidden=true;$('#intro').hidden=false;newMrn();window.scrollTo(0,0)};
   $('#prog').style.width='100%';$('#age').textContent=60;
   renderHist();
@@ -2607,4 +2610,131 @@ $('#ct').onchange=e=>{const v=e.target.value;
 $('#kb').onclick=()=>{S.avoid=!S.avoid;render()};
 $('#kc').onclick=()=>{const ci=coupleInfo(S);S.partner.carrier=ci.carrier==='me'?'p':'me';render()};
 $('#nm').addEventListener('keydown',e=>{if(e.key==='Enter')begin()});
+/* ---------- 把人生存成 PNG（10/28 Soba 提案，病歷表風、回顧摘要）：直接用 SVG 畫一張「分化追蹤病歷表（結案）」，再轉成 PNG，
+   不依賴任何外部函式庫。內容＝姓名／第二性別／回顧資料／八項屬性／氣味瓶／結論。名字可改、可選擇不顯示伴侶與孩子的名字（分享隱私）。
+   字體只能用系統字（SVG 轉圖時載不到網頁字體）。顏色跟著目前的外觀色系。 ---------- */
+const CARD_H=1620;
+function buildCardSVG(opt){
+  const cs=getComputedStyle(document.documentElement),V=n=>(cs.getPropertyValue('--'+n)||'').trim();
+  const C={bg:V('bg')||'#E4D7C1',card:V('card')||'#FBF5E8',fg:V('fg')||'#3B2F25',mute:V('mute')||'#7A6A57',line:V('line')||'#D5C7AB',acc:V('accent')||'#B2493E',f:V('f')||'#8CB7A5',m:V('m')||'#E7C46A',s:V('s')||'#B7A4D3',tape:V('tape')||'#E8A598',shadow:V('shadow')||'#CDBD9E'};
+  const W=1080,P=64,SANS="'Noto Sans TC','PingFang TC','Microsoft JhengHei','Heiti TC',sans-serif",SERIF="'Noto Serif TC','Songti TC','PMingLiU','Source Han Serif TC',serif";
+  const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const tw=(t,fs)=>[...String(t)].reduce((n,ch)=>n+(ch.charCodeAt(0)>255?fs:fs*.56),0);
+  const wrap=(t,maxW,fs)=>{const out=[];let cur='';for(const ch of String(t)){if(tw(cur+ch,fs)>maxW&&cur){out.push(cur);cur=ch}else cur+=ch}if(cur)out.push(cur);return out.length?out:['']};
+  const T=(x,y,t,fs,fill,extra)=>`<text x="${x}" y="${y}" font-size="${fs}" fill="${fill}" font-family="${(extra&&extra.serif)?SERIF:SANS}"${extra&&extra.w?` font-weight="${extra.w}"`:''}${extra&&extra.anchor?` text-anchor="${extra.anchor}"`:''}${extra&&extra.ls?` letter-spacing="${extra.ls}"`:''}>${esc(t)}</text>`;
+  let y=0;const parts=[];
+  const nm=opt.name||'（不公開）';
+  // 標頭
+  y=104;
+  parts.push(T(P,y,'第二性別健康中心',38,C.fg,{w:700}));
+  parts.push(T(P,y+36,'分化追蹤門診　結案紀錄',22,C.mute));
+  parts.push(T(W-P,y-4,'病歷號',20,C.mute,{anchor:'end'}));
+  parts.push(T(W-P,y+32,opt.mrn||'—',34,C.fg,{anchor:'end',w:700}));
+  y+=64;parts.push(`<line x1="${P}" y1="${y}" x2="${W-P}" y2="${y}" stroke="${C.fg}" stroke-width="3"/>`);
+  // 標題＋結案章
+  y+=92;parts.push(T(P,y,'分化追蹤病歷表',70,C.fg,{w:800,serif:1}));
+  parts.push(`<g transform="rotate(-9 ${W-P-100} ${y-20})"><rect x="${W-P-190}" y="${y-72}" width="180" height="76" rx="6" fill="none" stroke="${C.acc}" stroke-width="5"/><text x="${W-P-100}" y="${y-18}" font-size="46" fill="${C.acc}" font-weight="800" text-anchor="middle" font-family="${SANS}" letter-spacing="8">結案</text></g>`);
+  // 基本欄位
+  y+=60;
+  /* 結案年齡拿掉（Soba 10/29：大家都是 60 歲）；姓名／性別／出生區域排成同一列 */
+  const f1=[['姓名',nm,P,470],['性別',S.fg||'—',P+510,150],['出生區域',REGIONS[S.region0],P+700,W-P-(P+700)]];
+  f1.forEach(f=>{parts.push(T(f[2],y,f[0],20,C.mute));parts.push(T(f[2],y+40,f[1],32,C.fg,{w:600}));parts.push(`<line x1="${f[2]}" y1="${y+54}" x2="${f[2]+f[3]}" y2="${y+54}" stroke="${C.line}" stroke-width="2"/>`)});
+  y+=54+30;
+  const cw=(W-2*P)/2;
+  // 第二性別（命運填寫）＋氣味瓶（放在右邊，省掉一整個區塊）
+  const bsvg=document.querySelector('#stage .bwrap svg');
+  const bx=bsvg?W-P-150:W-P,fw=bx-P-(bsvg?24:0);
+  parts.push(`<rect x="${P}" y="${y}" width="${fw}" height="170" rx="8" fill="none" stroke="${C.fg}" stroke-width="3"/>`);
+  parts.push(T(P+26,y+38,'第二性別',22,C.mute));
+  parts.push(T(P+26,y+116,ID_TXT[S.sec],72,C.acc,{serif:1,w:800,ls:8}));
+  if(S.known)parts.push(T(P+fw-24,y+60,`${S.knownAge} 歲確定`,24,C.mute,{anchor:'end'}));
+  parts.push(T(P+fw-24,y+148,'這一欄由命運填寫',20,C.mute,{anchor:'end'}));
+  if(bsvg){const sv=bsvg.outerHTML.replace(/var\(--([a-z-]+)\)/g,(m,n)=>V(n)||'#888').replace(/<svg /,`<svg x="${bx}" y="${y-4}" `).replace(/width="\d+"/,'width="150"').replace(/height="\d+"/,'height="178"').replace(/ aria-hidden="true"/,'').replace('<svg ','<svg preserveAspectRatio="xMidYMid meet" ');parts.push(sv);parts.push(T(bx+75,y+190,S.scent?'我的氣味':'我的香水',20,C.mute,{anchor:'middle'}))}
+  y+=170+(bsvg?56:44);
+  // 回顧資料（兩欄）
+  const i1=parts.length;
+  parts.push(T(P,y,'回顧',24,C.mute,{w:700,ls:4}));y+=14;
+  let rows=endRows(opt.hide).filter(r=>r[0]!=='出生區域'&&r[0]!=='身分'&&r[0]!=='吸引力');
+  if(S.scent){if(S.attr>0)rows.unshift(['吸引力',S.attr.toFixed(1)+' / 10'])}
+  else if(S.perfume)rows.unshift(['香水',S.perfume.n+'（'+S.perfume.c+'）']);
+  /* 氣味（Soba 10/29：「我的氣味」要標出是哪些氣味）：浮／中／沉三層各列出零件名稱，稀有的加註 */
+  if(S.scent&&S.layers){
+    const nmOf=p=>p.n+(p.t==='e'?'（極稀有）':p.t==='r'?'（稀有）':'');
+    parts.push(`<line x1="${P}" y1="${y}" x2="${W-P}" y2="${y}" stroke="${C.line}" stroke-width="2" stroke-dasharray="6 6"/>`);
+    let sy=y;parts.push(T(P,sy+34,'氣味',22,C.mute));
+    const txt=[['浮',0],['中',1],['沉',2]].map(([t,k])=>t+' '+((S.layers[k]||[]).map(nmOf).join('、')||'—')).join('　');
+    const ls=wrap(txt,W-2*P-132,26);ls.forEach((l,j)=>parts.push(T(P+132,sy+34+j*36,l,26,C.fg,{w:500})));sy+=ls.length*36+4;
+    y=sy+22}
+  const gap=36,colW=(W-2*P-gap)/2,lw=132,vw=colW-lw;
+  const cells=rows.map(r=>{const ls=wrap(r[1],vw,26);return {r,ls,h:ls.length*36+24}});
+  const total=cells.reduce((n,c)=>n+c.h,0);let acc=0,split=cells.length;for(let i=0;i<cells.length;i++){if(acc+cells[i].h/2>total/2){split=i;break}acc+=cells[i].h}
+  const colH=[0,0];
+  cells.forEach((c,i)=>{const k=i<split?0:1,cx=P+k*(colW+gap),cy=y+colH[k];
+    parts.push(`<line x1="${cx}" y1="${cy}" x2="${cx+colW}" y2="${cy}" stroke="${C.line}" stroke-width="2" stroke-dasharray="6 6"/>`);
+    parts.push(T(cx,cy+34,c.r[0],22,C.mute));
+    c.ls.forEach((t,j)=>parts.push(T(cx+lw,cy+34+j*36,t,26,C.fg,{w:500})));
+    colH[k]+=c.h});
+  y+=Math.max(colH[0],colH[1]);
+  parts.push(`<line x1="${P}" y1="${y}" x2="${W-P}" y2="${y}" stroke="${C.line}" stroke-width="2" stroke-dasharray="6 6"/>`);
+  y+=48;
+  // 八項屬性
+  const i2=parts.length;
+  parts.push(T(P,y,'八項指標',24,C.mute,{w:700,ls:4}));y+=26;
+  const AT=[['幸福度','joy'],['財富','wealth'],['安全感','safe'],['自在','ease'],['自主','auto'],['牽絆','bond'],['道德','moral'],['名聲','fame']],COL=[C.acc,C.m,C.f,C.s],bw=300;
+  AT.forEach((a,i)=>{const cx=P+(i%2)*(cw+10),cy=y+Math.floor(i/2)*56,v=Math.max(0,Math.min(100,S.attrs[a[1]]));
+    parts.push(T(cx,cy+30,a[0],24,C.fg));
+    parts.push(`<rect x="${cx+120}" y="${cy+12}" width="${bw}" height="20" rx="10" fill="none" stroke="${C.fg}" stroke-width="2"/><rect x="${cx+120}" y="${cy+12}" width="${Math.max(10,bw*v/100)}" height="20" rx="10" fill="${COL[Math.floor(i/2)%4]}" stroke="${C.fg}" stroke-width="2"/>`);
+    parts.push(T(cx+120+bw+34,cy+31,Math.round(v),24,C.mute,{anchor:'end'}))});
+  y+=4*56+26;
+  // 結論
+  const A=S.attrs,mood=A.joy>=62?'這一生過得相當滿足。':A.joy>=45?'一生有起有落，總的說來算是平穩。':'這一生有太多遺憾，但走完了。';
+  const ml=wrap(mood,W-2*P-60,30);
+  const i3=parts.length;
+  parts.push(`<rect x="${P}" y="${y}" width="6" height="${ml.length*44+64}" fill="${C.acc}"/>`);
+  parts.push(T(P+28,y+34,'結論',22,C.mute,{w:700}));
+  ml.forEach((t,i)=>parts.push(T(P+28,y+80+i*44,t,32,C.fg,{serif:1,w:600})));
+  y+=ml.length*44+64+56;
+  // 頁尾
+  const ver=(document.querySelector('.ver')||{}).textContent||'';
+  parts.push(T(W/2,y,'《分化那一天後的我》　'+ver,22,C.mute,{anchor:'middle'}));
+  y+=48;
+  /* 固定高度：不足的部分平均分成三段（回顧前、八項指標前、結論前），每張圖一樣長 */
+  const slack=Math.max(0,CARD_H-y),g=slack/3;
+  const grp=(a,b,k)=>`<g transform="translate(0 ${Math.round(g*k)})">${parts.slice(a,b).join('')}</g>`;
+  const body=parts.slice(0,i1).join('')+grp(i1,i2,1)+grp(i2,i3,2)+grp(i3,parts.length,3);
+  const H=Math.max(y,CARD_H);
+  const bgs=`<defs><pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.1" fill="${C.line}"/></pattern></defs><rect width="${W}" height="${H}" fill="${C.bg}"/><rect x="22" y="40" width="${W-44}" height="${H-70}" rx="10" fill="${C.card}" stroke="${C.fg}" stroke-width="4"/><rect x="22" y="40" width="${W-44}" height="${H-70}" rx="10" fill="url(#dots)"/><g transform="rotate(-3 220 40)"><rect x="150" y="14" width="190" height="42" fill="${C.tape}" opacity=".85"/></g><g transform="rotate(3 860 40)"><rect x="770" y="16" width="150" height="40" fill="${C.f}" opacity=".85"/></g>`;
+  return {svg:`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">${bgs}${body}</svg>`,w:W,h:H};
+}
+function cardToPNG(opt,cb){
+  const c=buildCardSVG(opt),img=new Image();
+  img.onload=()=>{const cv=document.createElement('canvas');cv.width=c.w;cv.height=c.h;const g=cv.getContext('2d');g.drawImage(img,0,0);try{cv.toBlob(b=>cb(b,cv.toDataURL('image/png')))}catch(e){cb(null,null)}};
+  img.onerror=()=>cb(null,null);
+  img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(c.svg);
+}
+function openExport(){
+  if(document.querySelector('.cdlg'))return;
+  const o=document.createElement('div');o.className='cdlg';o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');document.body.appendChild(o);
+  let hide=false,name=S.name||'',blob=null,t=null;
+  o.innerHTML=`<div class="cd-card"><div class="cd-h"><b>存成圖片</b><span class="cd-beta">測試版</span></div>
+  <p class="cd-note">把這一生存成一張「分化追蹤病歷表」，方便分享。名字可以改成暱稱，也可以不顯示伴侶、孩子、老朋友的名字。</p>
+  <div class="cd-ctl"><label class="cd-sl"><span style="width:44px">姓名</span><input id="ex-nm" maxlength="12" value="${(S.name||'').replace(/"/g,'&quot;')}" style="flex:1;font:inherit;padding:4px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--fg)"></label>
+  <div class="cd-row"><button type="button" class="cd-chip" id="ex-hide" aria-pressed="false">不顯示伴侶、孩子、老朋友的名字</button><button type="button" class="cd-chip" id="ex-noname" aria-pressed="false">姓名也不公開</button></div></div>
+  <div class="cd-stage" id="ex-pv" style="max-height:60vh;overflow:auto;align-items:flex-start;margin-top:10px"><span style="color:var(--mute);font-size:13px">產生中…</span></div>
+  <div class="cd-foot"><span style="color:var(--mute);font-size:12px">手機可以長按圖片存到相簿</span><span class="cd-btns"><button type="button" class="cd-chip" id="ex-x">關閉</button><button type="button" class="cd-ok" id="ex-dl">下載 PNG</button></span></div></div>`;
+  const run=()=>{const nn=o.querySelector('#ex-noname').getAttribute('aria-pressed')==='true';
+    cardToPNG({name:nn?'':o.querySelector('#ex-nm').value.trim()||S.name||'',hide,mrn:(document.querySelector('#mrn')||{}).textContent},(b,url)=>{blob=b;o.querySelector('#ex-pv').innerHTML=url?`<img src="${url}" alt="人生回顧圖片" style="max-width:100%;height:auto;display:block">`:'<span style="color:var(--bad)">這個瀏覽器轉不出圖片。</span>'})};
+  const later=()=>{clearTimeout(t);t=setTimeout(run,250)};
+  const close=()=>{o.remove();document.removeEventListener('keydown',key,true)};
+  const key=e=>{if(e.key==='Escape'){e.stopPropagation();close()}};document.addEventListener('keydown',key,true);
+  o.addEventListener('click',e=>{if(e.target===o){close();return}
+    const b=e.target.closest('button');if(!b)return;
+    if(b.id==='ex-x')close();
+    else if(b.id==='ex-hide'){hide=!hide;b.setAttribute('aria-pressed',hide);run()}
+    else if(b.id==='ex-noname'){b.setAttribute('aria-pressed',b.getAttribute('aria-pressed')!=='true');run()}
+    else if(b.id==='ex-dl'){if(!blob)return;const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='分化追蹤病歷表.png';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500)}});
+  o.querySelector('#ex-nm').addEventListener('input',later);
+  run();
+}
+
 </script>
