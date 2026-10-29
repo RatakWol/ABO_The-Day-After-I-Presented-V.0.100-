@@ -268,7 +268,7 @@ body.qlock,body.qlock *{-webkit-user-select:none!important;user-select:none!impo
 
 </style>
 
-<div class="thmwrap"><span class="ver">Ver.0.111(Beta)</span><button id="thm" aria-expanded="false">外觀</button><div id="thmp" hidden><div class="tr"><span>模式</span><button data-m="auto">跟隨系統</button><button data-m="light">淺色</button><button data-m="dark">深色</button></div><div class="tr"><span>色系</span><button data-p="cream">米黃</button><button data-p="blue">藍</button><button data-p="pink">粉</button><button data-p="gray">灰</button><button data-p="term">終端</button></div></div></div>
+<div class="thmwrap"><span class="ver">Ver.0.112(Beta)</span><button id="thm" aria-expanded="false">外觀</button><div id="thmp" hidden><div class="tr"><span>模式</span><button data-m="auto">跟隨系統</button><button data-m="light">淺色</button><button data-m="dark">深色</button></div><div class="tr"><span>色系</span><button data-p="cream">米黃</button><button data-p="blue">藍</button><button data-p="pink">粉</button><button data-p="gray">灰</button><button data-p="term">終端</button></div></div></div>
 <div class="wrap">
  <section id="intro" class="intro">
   <div class="chart">
@@ -1150,7 +1150,7 @@ ev({id:'ex_debt_start',ok:s=>s.age>=10&&s.age<=22&&!s.flags.debt&&!s.fired.ex_de
 ev({id:'ex_collar_retire',ok:s=>s.collarYears>0&&s.mDone&&!s.marked&&!s.fired.ex_collar_retire&&cp(.6),once:1,key:1,
   text:s=>`你把戴了這麼多年的${cn(s)}項圈取下來，放在掌心。它的邊緣已經被磨得很圓，上面有你每一次出門、每一次回家的痕跡。`,
   choices:[{t:'留著，放進抽屜。',res:'你把它收進抽屜最裡面。偶爾翻東西時摸到，還是會停下來。',run:s=>addKeep(s,{id:'collar_old',type:'collar',name:`${cn(s)}項圈（舊）`,text:'戴了很多年，邊緣已經被磨圓了。'}),fx:{mood:2,ease:1}},
-           {t:'做成紀念品。',res:'你請人把它改成一個小吊飾。它不再是防線，而是一段時間的名字。',run:s=>addKeep(s,{id:'collar_craft',type:'craft',name:`${cn(s)}項圈吊飾`,text:'由舊項圈改造而成的小吊飾，掛在包包上。'}),fx:{mood:3,ease:2,bond:1}},
+           {t:'做成紀念品。',res:'你請人把它改成一個小吊飾。它不再是防線，而是一段時間的名字。',run:s=>{const wk=ownCollars(s).find(k=>k.id===s.wornId);addKeep(s,{id:'collar_craft',type:'craft',cfg:(wk&&wk.cfg)||CollarArt.presetFor(s.cmi||0,s.ctype||0),name:`${cn(s)}項圈吊飾`,text:'由舊項圈改造而成的小吊飾，掛在包包上。'})},fx:{mood:3,ease:2,bond:1}},
            {t:'捐給避難所。',res:'避難所的人收下時說了聲謝謝。你想，它大概會替另一個人擋下什麼。',fx:{moral:4,soc:2,mood:1}}]});
 ev({id:'ex_debt_collector',ok:s=>s.flags.debt&&!s.flags.debtCleared&&s.age>=10&&gate(s,'dcT',2)&&cp(s.age<18?.4:s.age<30?.25:.15),rep:1,
   text:s=>{s.flags.dcT=s.t;
@@ -1769,20 +1769,35 @@ function brooch(bx,by,kn,acc,dk,P){const f=n=>n.toFixed(1),rx=kn*2.4,ry=kn*3,bd=
 function render(c,view,o){
  o=o||{};const P=o.pfx||'m',worn=view==='worn';
  const mat=MATS[c.mat],col=c.color||mat.c,acc=c.acc,h=c.width/2;
- const x0=o.span?o.span[0]:(worn?92:24),x1=o.span?o.span[1]:(worn?268:336),cy=worn?112:62;
+ /* 配戴：布／皮革／矽膠／金屬的兩端要「繞到脖子後面」——帶子往兩側多延伸 EXT，再用脖子輪廓裁掉（Soba 10/29） */
+ const EXT=(worn&&!o.span&&c.mat!==1&&c.mat!==5)?14:0;
+ const x0=o.span?o.span[0]:(worn?92-EXT:24),x1=o.span?o.span[1]:(worn?268+EXT:336),cy=worn?112:62;
  const cv=worn?c.curve*1.3+8:c.curve*.7;
+ /* 幾何：帶子貼著脖子繞，所以弧度是「垂直方向的位移」（端點仍停在脖子的輪廓上，長度不變）。
+    布／皮革／矽膠／金屬的圓角端（bend=true）不再是固定的垂直半橢圓，而是把整個圓角長方形一起套上同一個位移，
+    圓角因此隨弧度被拉伸、彎曲（Soba 10/29）；蕾絲與隱藏金屬維持原本的端面。 */
  const X=t=>x0+(x1-x0)*t;
  const geo=hh=>{
-  const Y=(t,dy)=>cy-hh+dy+cv*4*t*(1-t);
+  const sh=t=>cv*4*t*(1-t);
+  const Y=(t,dy)=>cy-hh+dy+sh(t);
   const poly=(dy,a,b,n)=>{n=n||24;let s='';for(let i=0;i<=n;i++){const t=a+(b-a)*i/n;s+=`${i?'L':'M'}${X(t).toFixed(1)},${Y(t,dy).toFixed(1)} `}return s};
   const pl=(dy,a,b)=>poly(dy,a,b).replace(/^M/,'L');
-  const d=rr=>{const cap=(x,y)=>rr?`A ${rr} ${hh} 0 0 1 ${x.toFixed(1)},${y.toFixed(1)} `:`L${x.toFixed(1)},${y.toFixed(1)} `;
+  const d=(rr,bend)=>{
+   if(bend&&rr){
+    const W=x1-x0,r=Math.min(rr,W/2),N=14,pts=[],at=(x,dy)=>{const t=(x-x0)/W;pts.push([x,Y(t,dy)])};
+    for(let i=0;i<=24;i++)at(x0+r+(W-2*r)*i/24,0);
+    for(let i=1;i<=N;i++){const f=Math.PI*i/N;at(x1-r+r*Math.sin(f),hh-hh*Math.cos(f))}
+    for(let i=1;i<=24;i++)at(x1-r-(W-2*r)*i/24,2*hh);
+    for(let i=1;i<N;i++){const f=Math.PI*i/N;at(x0+r-r*Math.sin(f),hh+hh*Math.cos(f))}
+    return pts.map((q,i)=>`${i?'L':'M'}${q[0].toFixed(1)},${q[1].toFixed(1)}`).join(' ')+' Z'}
+   const cap=(x,y)=>rr?`A ${rr} ${hh} 0 0 1 ${x.toFixed(1)},${y.toFixed(1)} `:`L${x.toFixed(1)},${y.toFixed(1)} `;
    return `M${X(0).toFixed(1)},${Y(0,0).toFixed(1)} ${pl(0,0,1)}${cap(X(1),Y(1,2*hh))}${pl(2*hh,1,0)}${cap(X(0),Y(0,0))}Z`};
   return {Y,poly,d};
  };
  const G=geo(h);
- const rr=c.mat===3?Math.min(h*1.1,20):(c.edge==='round'?Math.min(14,h):0);
- const dBand=G.d(c.mat===1?0:rr);
+ /* 圓角／直角是平放時「邊緣的角」，不是厚度，配戴時看不到——配戴一律當直角（Soba 10/29） */
+ const rr=worn?0:(c.mat===3?Math.min(h*1.1,20):(c.edge==='round'?Math.min(14,h):0));
+ const dBand=G.d(c.mat===1?0:rr,c.mat!==1&&c.mat!==5);
  const outline=c.mat===1?'#8C7B66':c.mat===4?shade(col,-.55):'#3B2F25';
  const isHid=c.mat===5,isBow=c.trim==='bow'||c.trim==='bowgem';
  const showHW=!isHid||c.xray;
@@ -1793,6 +1808,8 @@ function render(c,view,o){
  defs+=`<linearGradient id="${P}sh" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".22"/><stop offset=".55" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".16"/></linearGradient>`;
  const full=`<rect x="0" y="0" width="360" height="270"`;
  if(worn){
+  /* 項圈有厚度：外表面比脖子輪廓再多出約 5，所以裁切用「放寬 5 的脖子輪廓」，邊緣另外描線，看起來像繞過去 */
+  if(EXT){defs+=`<clipPath id="${P}nc"><path d="M90 0 C95 95 87 160 53 205 L0 240 L0 270 L360 270 L360 240 L307 205 C273 160 265 95 270 0 Z"/></clipPath>`;}
   const neckC=lum(o.pv||'#f4efe6')<110?'#4a4750':'#cfcbc6';
   back+=`<path d="M95 0 C100 95 92 160 58 205 L0 240 L0 270 L360 270 L360 240 L302 205 C268 160 260 95 265 0 Z" fill="${neckC}"/>`;
   back+=`<path d="M95 0 C100 95 92 160 58 205 L0 240 L0 270 L360 270 L360 240 L302 205 C268 160 260 95 265 0 Z" fill="url(#${P}nk)"/>`;
@@ -1870,7 +1887,8 @@ function render(c,view,o){
  let st='';
  if(c.stitch!=='none'&&!isHid){
   const sc=lum(col)>150?shade(col,-.42):shade(col,.55);
-  const ln=(dy,da)=>`<path d="${G.poly(dy,.015,.985)}" fill="none" stroke="${sc}" stroke-width="1.2" ${da?`stroke-dasharray="${da}"`:''} stroke-linecap="round" stroke-opacity=".9"/>`;
+  const ti=rr?Math.min(.3,(rr*.8+4)/(x1-x0)):.015; /* 圓角端：縫線往內縮，不要戳出圓角外面（Soba 10/29） */
+  const ln=(dy,da)=>`<path d="${G.poly(dy,ti,1-ti)}" fill="none" stroke="${sc}" stroke-width="1.2" ${da?`stroke-dasharray="${da}"`:''} stroke-linecap="round" stroke-opacity=".9"/>`;
   if(c.stitch==='dash')st=ln(5.5,'5 3.5')+ln(2*h-5.5,'5 3.5');
   else st=ln(4,'')+ln(2*h-4,'')+ln(8.5,'4 3')+ln(2*h-8.5,'4 3');
  }
@@ -1930,7 +1948,7 @@ function render(c,view,o){
  const wrap=worn?`<g clip-path="url(#${P}c)"><rect x="0" y="0" width="360" height="270" fill="url(#${P}wr)"/></g>`:'';
  let vb=worn?'0 0 360 270':(isHid?'0 0 360 210':'0 0 360 170');
  if(o.crop){const pad=6,bow=isBow&&showHW,top=bow?16:pad,hasCharm=c.charm!=='none'&&showHW;const ext=Math.max(pad+4,(c.mat===1?0:rr)+4,o.lugs?14:0);vb=`${x0-ext} ${cy-h-top} ${x1-x0+2*ext} ${2*h+cv+top+pad+(isHid?Math.min(c.tail*1.2,100)+8:(hasCharm||bow?(bow?76:40):0))+(c.mat===1?6:0)}`}
- return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb}" ${o.w?`width="${o.w}"`:''} class="${o.cls||''}"><defs>${defs}</defs>${back}${isHid?hid:`<g clip-path="url(#${P}c)">${fill}</g>${outl}`}${wrap}${st}${tr}${cl}${ch}</svg>`;
+ return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb}" ${o.w?`width="${o.w}"`:''} class="${o.cls||''}"><defs>${defs}</defs>${back}${isHid?hid:`${EXT?`<g clip-path="url(#${P}nc)">`:''}<g clip-path="url(#${P}c)">${fill}</g>${outl}${EXT?'</g>':''}`}${EXT?`<g clip-path="url(#${P}nc)">${wrap}</g><g clip-path="url(#${P}c)"><path d="M90 0 C95 95 87 160 53 205 L0 240 L0 270 L360 270 L360 240 L307 205 C273 160 265 95 270 0 Z" fill="none" stroke="${outline}" stroke-width="1.4"/></g>`:wrap}${EXT?`<g clip-path="url(#${P}nc)">${st}${tr}</g>`:st+tr}${cl}${ch}</svg>`;
 }
 
 
@@ -1943,7 +1961,8 @@ function hardware(cx,cy,acc){const dk=shade(acc,-.45);
   `<path d="M${cx-6},${cy+16} Q${cx-10},${cy+34} ${cx},${cy+40} Q${cx+10},${cy+34} ${cx+6},${cy+16} Q${cx},${cy+10} ${cx-6},${cy+16}Z" fill="none" stroke="${acc}" stroke-width="2.6" stroke-linejoin="round"/><path d="M${cx+6},${cy+17} L${cx+4},${cy+33}" stroke="${dk}" stroke-width="1.4" stroke-linecap="round"/>`}
 function keepCloth(c,o){const P=o.pfx||'k',col=c.color||MATS[0].c,acc=c.acc;
  const w=Math.max(26,Math.min(44,c.width*.85)),x=100-w/2,top=22,bot=168,r=w/2;
- const d=`M${x},${bot} L${x},${top+r} A${r},${r} 0 0 1 ${x+w},${top+r} L${x+w},${bot}Z`;
+ /* 直角→尖頭（Soba 10/29），圓角→圓頭 */
+ const d=c.edge==='square'?`M${x},${bot} L${x},${top+r} L100,${top} L${x+w},${top+r} L${x+w},${bot}Z`:`M${x},${bot} L${x},${top+r} A${r},${r} 0 0 1 ${x+w},${top+r} L${x+w},${bot}Z`;
  const sc=lum(col)>150?shade(col,-.4):shade(col,.55);
  const defs=`<clipPath id="${P}c"><path d="${d}"/></clipPath><pattern id="${P}wv" width="4" height="4" patternUnits="userSpaceOnUse"><path d="M0 1H4M0 3H4" stroke="#fff" stroke-opacity=".28" stroke-width=".8"/><path d="M1 0V4M3 0V4" stroke="#000" stroke-opacity=".07" stroke-width=".8"/></pattern><linearGradient id="${P}vg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity=".25"/><stop offset=".5" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".2"/></linearGradient>`;
  const R=`x="0" y="0" width="200" height="280"`;
@@ -1951,11 +1970,19 @@ function keepCloth(c,o){const P=o.pfx||'k',col=c.color||MATS[0].c,acc=c.acc;
  const PATD=`<pattern id="${P}pd" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r="1.9" fill="${col2}"/><circle cx="9" cy="9" r="1.9" fill="${col2}"/></pattern><pattern id="${P}ps" width="11" height="11" patternUnits="userSpaceOnUse" patternTransform="rotate(38)"><rect width="4.5" height="11" fill="${col2}"/></pattern>`;
  const PATK=c.pat==='dots'?`<rect ${R} fill="url(#${P}pd)"/>`:c.pat==='stripe'?`<rect ${R} fill="url(#${P}ps)" fill-opacity=".85"/>`:c.pat==='border'?`<path d="${d}" fill="none" stroke="${col2}" stroke-width="10"/>`:'';
  const body=`<g clip-path="url(#${P}c)"><rect ${R} fill="${col}"/><rect ${R} fill="url(#${P}wv)"/>${PATK}<rect ${R} fill="url(#${P}vg)"/><path d="M${x+5},${top} V${bot} M${x+w-5},${top} V${bot}" stroke="${sc}" stroke-width="1.2" stroke-dasharray="5 3.5" fill="none"/><path d="M${100},${top+r+30} V${bot}" stroke="#000" stroke-opacity=".18" stroke-width="1"/></g><path d="${d}" fill="none" stroke="#3B2F25" stroke-width="1.4" stroke-linejoin="round"/>`;
- const tab=`<rect x="${x-3}" y="${bot-8}" width="${w+6}" height="30" rx="3" fill="#B9773F" stroke="#3B2F25" stroke-width="1.2"/><rect x="${x}" y="${bot-5}" width="${w}" height="24" rx="2" fill="none" stroke="#E8C79A" stroke-width="1" stroke-dasharray="3 2.5"/><circle cx="100" cy="${bot+7}" r="3" fill="${acc}" stroke="${shade(acc,-.45)}" stroke-width=".8"/>`;
+/* 裝飾套到紀念品：加在皮片（標籤）正中央（Soba 10/29）。無＝不放鉚釘；鉚釘／中線／蝴蝶結／寶石蝴蝶結 */
+ const tcy=bot+7,adk=shade(acc,-.45),tr_=c.trim,bowc=shade(col,lum(col)>150?-.05:.1);
+ const bowSvg=`<path d="M100,${tcy} L${100-14.5},${tcy-9.5} Q${100-17},${tcy} ${100-14.5},${tcy+9.5}Z M100,${tcy} L${100+14.5},${tcy-9.5} Q${100+17},${tcy} ${100+14.5},${tcy+9.5}Z" fill="${bowc}" stroke="#3B2F25" stroke-width="1.1" stroke-linejoin="round"/><rect x="95" y="${tcy-5.5}" width="10" height="11" rx="2.2" fill="${shade(bowc,-.18)}" stroke="#3B2F25" stroke-width="1.1"/>`;
+ const tabDec=tr_==='studs'?`<circle cx="100" cy="${tcy}" r="5.2" fill="${acc}" stroke="${adk}" stroke-width="1"/><circle cx="98.6" cy="${tcy-1.4}" r="1.5" fill="#fff" fill-opacity=".6"/>`
+  :tr_==='stripe'?`<path d="M${x+1.5},${tcy} H${x+w-1.5}" stroke="${acc}" stroke-width="4.4" stroke-linecap="round"/>`
+  :tr_==='bow'?bowSvg
+  :tr_==='bowgem'?bowSvg+`<path d="M100,${tcy-6.8} L105.4,${tcy} L100,${tcy+6.8} L94.6,${tcy}Z" fill="${acc}" stroke="${adk}" stroke-width="1" stroke-linejoin="round"/><path d="M94.6,${tcy} H105.4" stroke="#fff" stroke-opacity=".6" stroke-width=".8"/>`:'';
+ const tab=`<rect x="${x-3}" y="${bot-8}" width="${w+6}" height="30" rx="3" fill="#B9773F" stroke="#3B2F25" stroke-width="1.2"/><rect x="${x}" y="${bot-5}" width="${w}" height="24" rx="2" fill="none" stroke="#E8C79A" stroke-width="1" stroke-dasharray="3 2.5"/>${tabDec}`;
  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 280" ${o.w?`width="${o.w}"`:''}><defs>${defs}${PATD}</defs>${body}${tab}${hardware(100,bot+42,acc)}</svg>`}
 function keepLeather(c,o){const P=o.pfx||'k',col=c.color||MATS[2].c,acc=c.acc,dk=shade(acc,-.45);
  const w=Math.max(14,Math.min(24,c.width*.42)),x=100-w/2,top=20,bot=150,r=w/2;
- const d=`M${x},${bot} L${x},${top+r} A${r},${r} 0 0 1 ${x+w},${top+r} L${x+w},${bot}Z`;
+ /* 直角→尖頭（Soba 10/29），圓角→圓頭 */
+ const d=c.edge==='square'?`M${x},${bot} L${x},${top+r} L100,${top} L${x+w},${top+r} L${x+w},${bot}Z`:`M${x},${bot} L${x},${top+r} A${r},${r} 0 0 1 ${x+w},${top+r} L${x+w},${bot}Z`;
  const defs=`<clipPath id="${P}c"><path d="${d}"/></clipPath><linearGradient id="${P}lg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${shade(col,.14)}"/><stop offset=".35" stop-color="${col}"/><stop offset="1" stop-color="${shade(col,-.18)}"/></linearGradient><pattern id="${P}gr" width="6" height="6" patternUnits="userSpaceOnUse"><circle cx="1.5" cy="1.5" r=".7" fill="#000" fill-opacity=".14"/><circle cx="4.5" cy="4.5" r=".6" fill="#000" fill-opacity=".1"/></pattern><linearGradient id="${P}pg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${shade(acc,.55)}"/><stop offset=".45" stop-color="${acc}"/><stop offset="1" stop-color="${shade(acc,-.3)}"/></linearGradient>`;
  const R=`x="0" y="0" width="200" height="280"`,sc=shade(col,.5);
  const strap=`<g clip-path="url(#${P}c)"><rect ${R} fill="${col}"/><rect x="${x}" y="0" width="${w*.27}" height="280" fill="${shade(col,-.12)}"/><rect x="${x+w*.73}" y="0" width="${w*.27}" height="280" fill="${shade(col,-.12)}"/><rect x="${x+w*.27}" y="0" width="${w*.46}" height="280" fill="${shade(col,.05)}"/><path d="M${x+3},${top+4} V${bot} M${x+w-3},${top+4} V${bot}" stroke="${sc}" stroke-width="1" stroke-dasharray="3.5 2.5" fill="none"/></g><path d="${d}" fill="none" stroke="#2b1d14" stroke-width="1.3" stroke-linejoin="round"/><circle cx="100" cy="${top+r+1}" r="2.4" fill="#000" fill-opacity=".4"/>`;
@@ -1982,7 +2009,20 @@ const PRESET=[
  {knot:'side',pat:'plain',tail:60}];                   /* 隱藏金屬 */
 const WIDTH=[32,40,52,40];
 function presetFor(mi,ct){return Object.assign({},DEF,{mat:mi,width:WIDTH[ct]||40,curve:12},PRESET[mi]||{})}
-return {MATS,PAL,ACC,METALS,DEF,shade,lum,render,renderKeep,presetFor};
+/* ---------- 病歷表上「隨手丟著」的項圈／紀念品（Soba 10/29）：遊戲匯出卡片與設計器的「病歷表預覽」共用 ----------
+   kind=tall（手機掛繩、手機鍊，直立）／wide（項圈、錶帶）。s=大小（tall 為高、wide 為寬）、cx=水平中心、dy=相對標題基線的垂直中心、ang=角度。 */
+const CARD_DECO={tall:{s:436,cx:737,dy:-104,ang:50},wide:{s:722,cx:484,dy:-205,ang:45}};/* Soba 10/29 在設計器調的：tall＝布／皮革；wide＝項圈（金屬／錶帶尚未調） */
+function cardDeco(cfg,o){o=o||{};const y=o.y==null?260:o.y;let svg=null,kind='wide';
+ if(o.craft){const r=renderKeep(cfg,{pfx:'cxk'}),m=r.multi?r.multi[0]:r;if(m&&m.svg){kind=m.wide?'wide':'tall';svg=kind==='tall'?m.svg.replace(/viewBox="[^"]*"/,'viewBox="48 10 104 246"'):m.svg}}
+ else svg=render(cfg,'flat',{pfx:'cxw',crop:1});
+ if(!svg)return null;
+ const P=Object.assign({},CARD_DECO[kind],(o.p&&o.p[kind])||{}),tall=kind==='tall';
+ const vb=(svg.match(/viewBox="([-\d. ]+)"/)||[])[1],[,,vw,vh]=(vb||'0 0 200 100').split(/\s+/).map(Number);
+ const sc=tall?P.s/vh:P.s/vw,w=vw*sc,h=vh*sc,cx=P.cx,cy=y+P.dy;
+ /* 只動最外層 <svg ...> 開頭標籤；整串 replace 會把內容裡第一個 width（例如矽膠的色塊）一起刪掉 */
+ const sv=svg.replace(/^<svg[^>]*>/,m=>m.replace(/ (width|height|class|x|y)="[^"]*"/g,'').replace(/^<svg /,`<svg x="${(cx-w/2).toFixed(1)}" y="${(cy-h/2).toFixed(1)}" width="${w.toFixed(1)}" height="${h.toFixed(1)}" `));
+ return {kind,svg:`<defs><filter id="cxsh" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur in="SourceAlpha" stdDeviation="5"/><feOffset dx="7" dy="9" result="b"/><feComponentTransfer><feFuncA type="linear" slope=".32"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><g filter="url(#cxsh)" transform="rotate(${P.ang} ${cx} ${cy})">${sv}</g>`}}
+return {MATS,PAL,ACC,METALS,DEF,shade,lum,render,renderKeep,presetFor,cardDeco,CARD_DECO};
 })();
 
 /* ---------- 遊戲內項圈設計器（10/26，Ver.0.102 測試版）：做「新的」項圈時暫停月份跳出來，按 OK 才扣款、成為戴著的那條。
@@ -2633,7 +2673,15 @@ function buildCardSVG(opt){
   y+=64;parts.push(`<line x1="${P}" y1="${y}" x2="${W-P}" y2="${y}" stroke="${C.fg}" stroke-width="3"/>`);
   // 標題＋結案章
   y+=92;parts.push(T(P,y,'分化追蹤病歷表',70,C.fg,{w:800,serif:1}));
-  parts.push(`<g transform="rotate(-9 ${W-P-100} ${y-20})"><rect x="${W-P-190}" y="${y-72}" width="180" height="76" rx="6" fill="none" stroke="${C.acc}" stroke-width="5"/><text x="${W-P-100}" y="${y-18}" font-size="46" fill="${C.acc}" font-weight="800" text-anchor="middle" font-family="${SANS}" letter-spacing="8">結案</text></g>`);
+  const stampSvg=`<g transform="rotate(-9 ${W-P-100} ${y-20})"><rect x="${W-P-190}" y="${y-72}" width="180" height="76" rx="6" fill="none" stroke="${C.acc}" stroke-width="5"/><text x="${W-P-100}" y="${y-18}" font-size="46" fill="${C.acc}" font-weight="800" text-anchor="middle" font-family="${SANS}" letter-spacing="8">結案</text></g>`;
+  /* 項圈／紀念品展示（Soba 10/29）：放在標題旁。做成紀念品的顯示紀念品；結案時還戴著的顯示項圈；其他不顯示 */
+  parts.push(stampSvg);/* 結案章先畫，項圈／紀念品蓋在它上面（Soba 10/29） */
+  try{
+    const craft=(S.keeps||[]).find(k=>k.type==='craft'&&k.cfg);
+    let d=craft?CollarArt.cardDeco(craft.cfg,{y,craft:1}):null;
+    if(!d&&S.collar){const wk=ownCollars(S).find(k=>k.id===S.wornId);d=CollarArt.cardDeco((wk&&wk.cfg)||CollarArt.presetFor(S.cmi||0,S.ctype||0),{y})}
+    if(d)parts.push(d.svg);
+  }catch(e){}
   // 基本欄位
   y+=60;
   /* 結案年齡拿掉（Soba 10/29：大家都是 60 歲）；姓名／性別／出生區域排成同一列 */
