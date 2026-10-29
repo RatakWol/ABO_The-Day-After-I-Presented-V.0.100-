@@ -921,7 +921,7 @@ function makeCollar(s,mi,free,cfg){
   const k=addKeep(s,{id:'collar_own_'+(s.keeps||[]).length+'_'+mi,type:'collar',own:1,mat:mi,cfg:cfg||null,name:MAT[mi].n+'項圈'+(n?' '+(n+1):''),text:free?'訂製的。':'你自己挑、自己付錢買的。'});
   if(k){s.wornId=k.id;syncWorn(s)}return k}
 /* 標記時：戴著的那條交給伴侶（從我的項圈移除），記下材質，半年後由 ex_mark_after 變成伴侶的「手部物件」禮物（10/26 Soba） */
-function giveWornToPartner(s){const o=ownCollars(s),w=o.find(k=>k.id===s.wornId)||o[0];s.markMat=w?w.mat:(s.cmi||0);if(w)s.keeps=s.keeps.filter(k=>k!==w)}
+function giveWornToPartner(s){const o=ownCollars(s),w=o.find(k=>k.id===s.wornId)||o[0];s.markMat=w?w.mat:(s.cmi||0);s.markCfg=(w&&w.cfg)||null;if(w)s.keeps=s.keeps.filter(k=>k!==w)}
 function setKeep(s,id,status){const k=(s.keeps||[]).find(x=>x.id===id);if(k)k.status=status}
 function loseKeeps(s,n,why){const lost=[];for(let i=0;i<n&&s.keeps.some(x=>!x.lost);i++){const c=s.keeps.filter(x=>!x.lost);const k=c[Math.floor(R()*c.length)];k.lost=why;lost.push(k)}return lost}
 /* ---------- 情書內文：寄信人類型（A／B／O／匿名），{n} 是對方聞到的味道、{nm} 是玩家的名字 ---------- */
@@ -2013,8 +2013,8 @@ function presetFor(mi,ct){return Object.assign({},DEF,{mat:mi,width:WIDTH[ct]||4
    kind=tall（手機掛繩、手機鍊，直立）／wide（項圈、錶帶）。s=大小（tall 為高、wide 為寬）、cx=水平中心、dy=相對標題基線的垂直中心、ang=角度。 */
 const CARD_DECO={tall:{s:436,cx:737,dy:-104,ang:50},wide:{s:722,cx:484,dy:-205,ang:45}};/* Soba 10/29 在設計器調的：tall＝布／皮革；wide＝項圈（金屬／錶帶尚未調） */
 function cardDeco(cfg,o){o=o||{};const y=o.y==null?260:o.y;let svg=null,kind='wide';
- if(o.craft){const r=renderKeep(cfg,{pfx:'cxk'}),m=r.multi?r.multi[0]:r;if(m&&m.svg){kind=m.wide?'wide':'tall';svg=kind==='tall'?m.svg.replace(/viewBox="[^"]*"/,'viewBox="48 10 104 246"'):m.svg}}
- else svg=render(cfg,'flat',{pfx:'cxw',crop:1});
+ if(o.craft){const r=renderKeep(cfg,{pfx:'cxk'}),m=r.multi?r.multi[o.pick||0]:r;if(m&&m.svg){kind=m.wide?'wide':'tall';svg=kind==='tall'?m.svg.replace(/viewBox="[^"]*"/,'viewBox="48 10 104 246"'):m.svg}}
+ if(!svg)svg=render(cfg,'flat',{pfx:'cxw',crop:1});/* 蕾絲、矽膠沒有紀念品造型：直接展示項圈本身 */
  if(!svg)return null;
  const P=Object.assign({},CARD_DECO[kind],(o.p&&o.p[kind])||{}),tall=kind==='tall';
  const vb=(svg.match(/viewBox="([-\d. ]+)"/)||[])[1],[,,vw,vh]=(vb||'0 0 200 100').split(/\s+/).map(Number);
@@ -2679,7 +2679,10 @@ function buildCardSVG(opt){
   try{
     const craft=(S.keeps||[]).find(k=>k.type==='craft'&&k.cfg);
     let d=craft?CollarArt.cardDeco(craft.cfg,{y,craft:1}):null;
-    if(!d&&S.collar){const wk=ownCollars(S).find(k=>k.id===S.wornId);d=CollarArt.cardDeco((wk&&wk.cfg)||CollarArt.presetFor(S.cmi||0,S.ctype||0),{y})}
+    /* 標記後項圈給了伴侶、改成手機掛繩／手機鍊／錶帶：卡片展示那個成品，不是已經卸下的項圈 */
+    const gift=(S.keeps||[]).find(k=>k.id==='mark_gift');
+    if(!d&&S.marked&&gift){const mm=S.markMat||0,mc=S.markCfg||CollarArt.presetFor(mm,MAT[mm].c);d=CollarArt.cardDeco(mc,{y,craft:mm!==1,pick:/錶帶/.test(gift.name||'')?1:0})}
+    if(!d&&S.collar&&!S.marked){const wk=ownCollars(S).find(k=>k.id===S.wornId);d=CollarArt.cardDeco((wk&&wk.cfg)||CollarArt.presetFor(S.cmi||0,S.ctype||0),{y})}
     if(d)parts.push(d.svg);
   }catch(e){}
   // 基本欄位
